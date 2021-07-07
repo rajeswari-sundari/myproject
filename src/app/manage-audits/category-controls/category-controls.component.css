@@ -1,0 +1,6 @@
+
+.disabled-btn{
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}

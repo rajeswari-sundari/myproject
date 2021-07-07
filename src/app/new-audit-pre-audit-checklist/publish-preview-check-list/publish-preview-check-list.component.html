@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-sm-10 column-height pad-left">
+    <label for="label-1" class="control-label-1">Selected checklist Items</label>
+  </div>
+</div>
+         
+<div class="row">
+  <ag-grid-angular  name = "agPOC"
+                    style="width: 98%; height: 250px;" 
+                    class="ag-theme-balham"
+                    [rowData]="rowData" 
+                    [columnDefs]="columnDefs"
+                    [defaultColDef]="defaultColDef"
+                    [gridOptions]="gridOptions"
+                    [overlayLoadingTemplate]="loadingTemplate"
+                    [overlayNoRowsTemplate]="noRowsTemplate">
+  </ag-grid-angular>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+  <div class="col-sm-8 pad-left">
+    <div class="custom-btn text-left top">          
+      <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="BacktoManagePOC();" name="btnClear" >Back</button>                       
+      <button  class="btn custom-blue-btn" name="btnSave" (click)="Publish();">Publish</button>           
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

@@ -1,0 +1,5 @@
+.hide-btn{
+    opacity: .5;
+    cursor: default;
+    display : none;
+}

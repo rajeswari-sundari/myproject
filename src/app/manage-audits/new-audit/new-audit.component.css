@@ -1,0 +1,9 @@
+.disabled-btn{
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}
+
+.art-disable input[type="checkbox"]::after {
+    color: #7f8c8d !important;
+}

@@ -1,0 +1,41 @@
+<ng-container *ngIf="editauditlinkId === 'addEdit_Pre_audit_id'; else forOtherPages">
+    <span class="edit-icon" *ngIf="userAction['edit']">
+        <img src="/Bundles/assets/noun-edit.png" (click)="onClick()">
+        <div>Edit</div>
+    </span>
+    <span class="delete-icon" style="margin:20px;" *ngIf="userAction['delete']">
+        <img src="/Bundles/assets/noun-delete.png" (click)="onClick1($event)">
+        <div>Delete</div>
+    </span>
+    <span class="view-icon" *ngIf="userAction['view']">
+        <img src="/Bundles/assets/View.svg" (click)="onClickView()">
+        <div>View</div>
+    </span>
+</ng-container>
+
+<ng-template #forOtherPages>
+    <span class="edit-icon" *ngIf="category_id!=0 && checklistpublished !='Yes' && (editauditlinkId == 'addEdit_Pre_audit_id' || editauditlinkId == 'audit_id' || editauditlinkId == 'parent_category_id' || editauditlinkId == 'audit_category_id')">
+        <img src="/Bundles/assets/noun-edit.png" (click)="onClick()">
+        <div>Edit</div>
+    </span>
+    <span class="delete-icon" style="margin:20px;" *ngIf="audit_id > 0 && preaudit_checklist_id === undefined && checklistpublished =='No'">
+        <img src="/Bundles/assets/noun-delete.png" (click)="onClick1($event)">
+        <div>Delete</div>
+    </span>
+    <span class="view-icon" *ngIf="checklistpublished =='Yes' || auditStatus=='Yes'">
+        <img src="/Bundles/assets/View.svg" (click)="onClickView()">
+        <div>View</div>
+    </span>
+</ng-template>
+
+<span  *ngIf="isPDF == 'OpenPDF'"><a target="_blank" style="margin-top:10px;" class="btn custom-cancel-btn" href="/ImportEvidence/{{this.pdfname}}">{{viewlink}}</a> </span> 
+
+<span class="arrow-icon" *ngIf="editauditlinkId=='audit_readiness_control'">
+    <img src="/Bundles/assets/Double_Arrow.svg" (click)="onClickView()">
+    <div>Edit</div>
+</span>
+<span class="arrow-icon" *ngIf="editauditlinkId=='preaudit_readiness_checklist'">
+    <img src="/Bundles/assets/Double_Arrow.svg" (click)="onClickView()">
+    <div>Edit</div>
+</span> 
+

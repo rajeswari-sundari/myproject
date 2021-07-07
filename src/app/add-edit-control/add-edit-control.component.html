@@ -1,0 +1,126 @@
+<div class="page-content">  
+  <nav aria-label="breadcrumb" class="breadcumb-nav">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+      <li class="breadcrumb-item"><a  routerLink="/Managecontrols" >Manage Controls</a> </li>
+      <li class="breadcrumb-item active">Add or edit control</li>
+    </ol>
+  </nav>
+
+  <div class="profile-tab-content"> 	
+		<div class="tab-content"> 
+			<div id="tab-1" >
+				<div class="row">
+					<div class="col-sm-4">
+						<h4 class="sub-head-title">  Add or edit control</h4>
+          </div>
+        </div>
+
+        <div class="search-control-table">
+          <div class="search-content-row row">
+            <div class="col-sm-3"> 
+              <div class="form-group">
+                <label for="label-1" class="control-label"> Parent Category</label>
+                <input type=text class="form-control" [(ngModel)] = "parentCategoryName"  name="Control" readonly >
+              </div>
+            </div>
+            <div class="col-sm-2"> 
+              <div class="form-group">
+                <label for="label-1" class="control-label"> Weightage(%)<span class="mandatory">*</span></label>
+                <input type=text class="form-control"  [(ngModel)]="parentWeightage"  #parentweightage="ngModel" required  maxlength="5"  pattern="^[0-9]+([.][0-9]{1,2})?$" [class.is-invalid]="(parentweightage.invalid && parentweightage.dirty) || parentWeightage > 100" >
+                <div *ngIf = "parentweightage.invalid && parentweightage.dirty">
+                  <div class="invalid_error" *ngIf = "parentweightage.errors?.required">Parent Weightage is Required. </div>   
+                  <div class="invalid_error" *ngIf = "parentweightage.errors?.pattern" >Value is invalid. </div>    
+                  <div class="invalid_error" *ngIf = "parentWeightage > 100"> Value should be less then or equal 100. </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5"> </div>
+            <div class="custom-btn text-left"> 
+              <br>
+              <button  class="btn custom-blue-btn" (click)="UpdateWeightage();" name="btnUpdateWeightage" [disabled] ="parentweightage.invalid || parentWeightage > 100 || submitbuttonhideShow() "   >Update Weightage</button>
+            </div>
+          </div>
+      </div>
+    </div>
+     <div class="col-sm-2"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <h4 class="sub-2-head-title">Controls </h4>
+      </div>
+    </div>
+    
+    <div class="row">
+      <table class="table control-table">
+        <thead> 
+          <tr>
+            <th> Category <span class="mandatory">*</span></th> 
+            <th> Control <span class="mandatory">*</span></th>
+            <th> Weightage <span class="mandatory">*</span></th>
+            <th>Restrict auto-calculate <span class="mandatory">*</span> </th>
+            <th>Objective </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let control of controls; let controlIndex=index;">
+            <td style="width: 20%;">
+              <select  class="selectpicker show-tick form-control"  [(ngModel)] = "control.category_id" name="CategoryID_{{controlIndex}}" #categoryname="ngModel" [class.is-invalid]="categoryname.invalid" required  >
+                <option  [ngValue] = "null" >Select Category </option>
+                <option *ngFor = "let pcl of categories;" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+              </select>
+              <div class="invalid_error" *ngIf = "categoryname.invalid" >Category is required </div>
+            </td>
+            <td style="width: 20%;" >
+              <input class="form-control" type="text" [(ngModel)] = "control.control_name" name = "Control_controlIndex"   #controlName = "ngModel" [class.is-invalid]="controlName.invalid" required maxlength="200" />
+              <div class="invalid_error" *ngIf = "controlName.invalid" >Control name is required </div>
+            </td>
+            <td class="weight_age">
+              <input class="form-control" type="text" [(ngModel)] = "control.weightage" name = "Weightage_{{controlIndex}}" required #weightage = "ngModel" [class.is-invalid]="weightage.invalid || control.weightage > 100" pattern="^[0-9]+([.][0-9]{1,2})?$" maxlength="5" /> 
+              <div class="invalid_error" *ngIf = "weightage.errors?.required">Weightage is required. </div>
+              <div class="invalid_error" *ngIf = "weightage.errors?.pattern" >Value is invalid. </div> 
+              <div class="invalid_error" *ngIf = "control.weightage > 100"> Value should be less then or equal 100. </div>
+            </td>
+            <td class="auto-calculate">
+              <input type="radio" value="No" name="Restrictautocalculate_{{controlIndex}}" [(ngModel)] ="control.restrict_weightage_calc" required > <span>No</span> 
+              <input type="radio" value="Yes" name="Restrictautocalculate_{{controlIndex}}" [(ngModel)] ="control.restrict_weightage_calc" required> <span>Yes</span> 
+            </td>
+            <td>
+              <textarea [(ngModel)] = "control.objective" name = "objective_controlIndex" maxlength="2000" ></textarea>
+            </td>
+            <td style="width: 6%;"> 
+              <mat-icon *ngIf = "controlIndex === controls.length - 1"   (click)="AddControl();" name="btnAddControl" >add_circle</mat-icon>
+              <mat-icon *ngIf = "!(controls.length - 1 === 0)" (click)="DeleteControl(controlIndex);" >delete_outline</mat-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="row">
+      <div class="col-sm-7">
+        <!-- <button class="btn custom-cancel-btn" [routerLink]=""  (click)="updateRestoreDefaultWeightageCalc();">Restore default weightage calcultaion</button> -->
+        <!-- <button class="btn custom-add-btn" (click)="AddControl();" name="btnAddControl">&#43; Add another</button> -->
+      </div>
+      <div class="col-sm-3" style="padding-right: 0px !important;text-align:right;">
+        <button class="btn custom-cancel-btn" [routerLink]=""  (click)="updateRestoreDefaultWeightageCalc();">Restore default weightage calcultaion</button>
+      </div>
+      <div class="col-sm-2">
+        <button  class="btn custom-blue-btn"  (click)="UpdateWeightage();" name="btnUpdateWeightage" 
+        [disabled] ="parentweightage.invalid || parentWeightage > 100 || submitbuttonhideShow() ">Update Weightage</button>
+      </div>
+    </div>
+       
+    <div class="custom-btn text-left">
+      <button  class="btn custom-cancel-btn" [routerLink]="'/Managecontrols'" style ="margin-left: 0px;"  name="btnClear" >Cancel</button>
+      <!-- <button class="btn custom-cancel-btn" [routerLink]=""  (click)="updateRestoreDefaultWeightageCalc();">Restore default weightage calcultaion</button> -->
+      <button  class="btn custom-blue-btn" (click)="SaveControls();" name="btnSearch" [disabled] ="parentweightage.invalid || parentWeightage > 100 || submitbuttonhideShow() " >Save Controls</button>
+    </div>
+  </div>
+
+</div>
+
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

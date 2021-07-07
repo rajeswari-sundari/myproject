@@ -1,0 +1,90 @@
+<div class="tab-content"> 
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+      <ol class="breadcrumb">
+        <!-- <li class="breadcrumb-item"><a href="#">Home</a></li> -->
+        <li class="breadcrumb-item"><a routerLink="/Accountlandscape/0">Account landscape</a></li>
+        <li class="breadcrumb-item"><a routerLink="/Accountlandscape/1">Manage Control</a></li>
+        <li class="breadcrumb-item active">Metrics Definition</li>
+      </ol>
+    </nav>
+
+    <h2 class="main-head-title">Metrics Definition</h2>
+
+    <div class="profile-tab-content">
+        <div class="tab-content">
+
+            <div class="search-control-table">
+                <div class="search-content-row row"> 
+                    <div class="col-sm-3"> 
+                        <div class="form-group">
+                            <label for="label-1" class="control-label">Parent Category</label>                    
+                                <select  class="selectpicker show-tick form-control"  [(ngModel)] = "metricsDefinitionSearchData.ParentCategoryID" name="ParentCategoryID" (change)=LoadCategory(); >
+                                    <option  [ngValue] = "0" >Select ParentCategory </option>
+                                    <option *ngFor = "let pcl of parentCategories" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"> 
+                        <div class="form-group">
+                            <label for="label-1" class="control-label">Category</label>
+                            <!--[(ngModel)] = "manageControlsSearchData.CategoryID" name="CategoryID" -->
+                            <select  class="selectpicker show-tick form-control"  [(ngModel)] = "metricsDefinitionSearchData.CategoryID" name="CategoryID" >
+                                <option  [ngValue] = "0" >Select Category </option>
+                                <option *ngFor = "let pcl of Categories" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+                            </select>		
+                        </div>
+                    </div>
+                    <div class="col-sm-3"> 
+                        <div class="form-group">
+                            <label for="label-1" class="control-label">Control</label>                            
+                            <input type=text class="form-control" [(ngModel)] = "metricsDefinitionSearchData.Control"  name="Control"  placeholder="E.g. Project Plan available" maxlength="200">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--(click)="ResetControls()" (click)="SearchControls();" -->
+                    <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetControls()" name="btnClear" >Clear Search</button>
+                    <button  class="btn custom-blue-btn" (click)="SearchControls();" name="btnSearch" >Search Controls</button>
+                </div> 
+            </div>
+
+            <div class="search-control-list">
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h4 class="sub-head-title"> Control List</h4>
+                    </div>
+                </div>
+                <!--id="agGridMetrics" (onCellEditingStopped)="onCellEditingStopped($event)"
+                        (onCellEditingStarted)="onCellEditingStarted($event)" [components]="components"
+                    [gridOptions]="gridOptions" -->
+                <div class="row">
+                    <ag-grid-angular    name="AcclsMetrics" style="width: 98%; height: 400px;"
+                                        class="ag-theme-balham" 
+                                        
+                                        [rowData]="AcclsMetricsrow"
+                                        [columnDefs]="AcclsMetricscolumn" 
+                                        [defaultColDef]="AcclsMetricsdefaultColDef"
+                                        [gridOptions]="gridOptions" 
+                                        [overlayLoadingTemplate]="AcclsMetricsloadingTemplate"
+                                        [overlayNoRowsTemplate]="noAcclsMetricsRowsTemplate"
+                    >
+                    </ag-grid-angular>
+                </div>
+                
+                <div class="row">
+                    <div>&nbsp;</div>
+                </div>
+               
+                <div class="custom-btn text-left">                    
+                    <button class="btn  custom-cancel-btn" style="margin-left: 0px;"
+                        name="btnCancel" (click)="GotoControl();" >Cancel</button>
+                    <button class="btn custom-blue-btn" name="btnSaveMetrics" (click)="SaveMetrics();">Save metrics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner> 

@@ -1,0 +1,56 @@
+@font-face {
+  font-family: 'TTNorms-Medium';
+  src: url('/resources/fonts/TTNorms-Medium.otf') format("opentype"); 
+}
+
+@font-face {
+  font-family: 'TTNorms-Regular';
+  src: url('/resources/fonts/TTNorms-Regular.otf') format("opentype");  
+} 
+
+:host {
+  position: absolute;
+  width: 45%;
+  font-size: 12px;
+  height: auto;
+  pointer-events: none;
+  transition: opacity 30s;
+  border: 1px solid #D8D8D8;
+  box-shadow: 0px 3px 6px #00000029;
+}
+
+:host.ag-tooltip-hiding {
+  opacity: 0;
+}
+
+.custom-tooltip {
+  background-color:#FFFFFF;
+}
+
+.objective-data, .weightage-data {
+  padding: 2%;
+}
+
+.weightage-data .col {
+  text-align: center;
+  line-height: 18px;
+}
+
+.weightage-data span, .weightage-data p, .objective-data p {
+  font-family: 'TTNorms-Medium';
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #151515;
+  opacity: 1;
+}
+
+.weightage-data p, .objective-data p {
+  font-family: 'TTNorms-Regular' !important;
+  font-weight: normal !important;
+}
+
+
+/* .custom-tooltip p:first-of-type {
+  font-weight: bold;
+} */

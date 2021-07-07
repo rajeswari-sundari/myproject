@@ -1,0 +1,197 @@
+<div class="row">
+    <div class="col-sm-4">
+        <h4 class="sub-head-title">Search Controls</h4>
+    </div>
+                                    
+    <div class="col-sm-8">
+        <div class="custom-btn" style="float: right;">
+            <button class="btn custom-blue-btn" (click)="MetricsDefinition();">Metrics definition</button> 
+            <button class="btn  custom-blue-btn" (click)="ManageCategory();">Manage categories</button> 	
+        </div>
+    </div>
+</div>
+
+<div class="search-control-table">
+    <div class="search-content-row row"> 
+        <div class="col-sm-3"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label">Parent Category</label>                    
+                    <select  class="selectpicker show-tick form-control"  [(ngModel)] = "manageControlsSearchData.ParentCategoryID" name="ParentCategoryID" (change)=LoadCategory(); >
+                        <option  [ngValue] = "0" >Select ParentCategory </option>
+                        <option *ngFor = "let pcl of parentCategories" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+                    </select>
+            </div>
+        </div>
+        <div class="col-sm-3"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label">Category</label>
+                
+                <select  class="selectpicker show-tick form-control"  [(ngModel)] = "manageControlsSearchData.CategoryID" name="CategoryID" >
+                    <option  [ngValue] = "0" >Select Category </option>
+                    <option *ngFor = "let pcl of Categories" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+                </select>	
+            </div>
+        </div>
+        <div class="col-sm-3"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label">Control</label>
+                <!--   [(ngModel)] = "manageControlsSearchData.ParentCategoryID" name="ParentCategoryID" (change)=LoadCategory();  -->
+                <input type=text class="form-control" [(ngModel)] = "manageControlsSearchData.Control"  name="Control"  placeholder="E.g. Project Plan available" maxlength="200">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetControls()" name="btnClear" >Clear Search</button>
+        <button  class="btn custom-blue-btn" (click)="SearchControls();" name="btnSearch" >Search Controls</button>
+    </div> 
+</div>
+
+<div class="search-control-list">
+    <div class="row">
+        <div class="col-sm-4">
+            <h4 class="sub-head-title"> Control List</h4>
+        </div>
+    </div>
+                                
+    <div class="row">
+        <ag-grid-angular 	name = "agControls"
+                            style="width: 98%; height: 400px;" 
+                            class="ag-theme-balham"
+                            [rowData]="rowData" 
+                            [columnDefs]="Controlcolumn"
+                            [gridOptions]="gridOptions2"
+                            [frameworkComponents]="frameworkComponents"
+                            [defaultColDef]="defaultColDef"
+                            >
+        </ag-grid-angular>
+    </div>		
+</div>	
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner> 
+<form id="catpop">
+<div class="modal fade" id="Categorypopup" role="dialog" data-backdrop="static" data-keyboard="false"> 
+	<div class="modal-dialog">							
+		<div class="modal-content" style="width: 900px; right: 160px;">															  
+		   	<div  class="modal-header">  
+		  		<h4 class="modal-title pull-left">Manage categories</h4>  
+		  		<button type="button" class="close pull-right" (click)="closeCategory();" aria-label="Close">  
+					<span aria-hidden="true">×</span>  
+		  		</button>  
+            </div>
+
+            <div  class="modal-body"> 
+                <div class="tab-content modal-1"> 	
+                    
+                    <div class="row"> 
+                        <div class="col-sm-4">															
+                            <div class="form-group">       
+                                <label for="label-1" class="control-label">Category<span class="mandatory">*</span></label>       
+                                <!--(keypress)="changecategory(manageCategories.category_name);"-->        
+                                <input type=text  id="category"  class="form-control" [(ngModel)]="manageCategories.category_name" name="category_name"  placeholder="Enter Category"
+                                #cat_name="ngModel" maxlength="200" [class.is-invalid]="cat_name.dirty && cat_name.invalid" required>                  
+                                <div class="form-control-key" *ngIf="cat_name.errors && (cat_name.dirty || cat_name.touched)">
+                                    <div class="invalid_error" *ngIf = "cat_name.errors?.required">Category name is Required. </div>                                    
+                                </div>         
+							</div>
+                        </div>
+
+                        <div class="col-sm-4"> 
+                            <div class="form-group auto-calculate">  
+								<label for="label-1" class="control-label">Has a Parent<span class="mandatory" style="margin: 0px;">*</span></label>
+								<input type="radio"  id="parentyes" [(ngModel)]="manageCategories.Hasparent" name="radio" value="Yes" (change)="radioParent();" #haspar="ngModel"required><span>Yes</span>    
+								<input type="radio" id="parentno" [(ngModel)]="manageCategories.Hasparent" name="radio" value="No" (change)="radioParent();" #haspar="ngModel" required><span>No</span>
+                                <!-- <div class="form-control-feedback">
+                                    <div class="invalid_error" *ngIf = "haspar.errors?.required"></div>
+                                </div> -->
+							</div>               
+                        </div>
+                        
+                        <div class="col-sm-4"  id="ParentID" >
+                            <div class="form-group">
+                                <label for="label-1" class="control-label"> Parent Category<span class="mandatory">*</span></label>
+                                <!--(change)="manageparent();"-->
+								<select id="parent_category_id" class="selectpicker show-tick form-control" [(ngModel)]="manageCategories.parent_category_id"  name="manageCategories.parent_category_id"   #pcat_name="ngModel" required >
+						  			<option  [ngValue] = null >Select ParentCategory </option>
+									<option *ngFor = "let pc of manageparentCategories" [ngValue] = "pc.Key" >{{pc.Value}} </option>
+								</select>                             
+							</div>
+                            <div class="form-control-key" *ngIf="pcat_name.errors && (pcat_name.dirty || pcat_name.touched)">
+                                <div class="invalid_error" style="margin-top:-18px;" *ngIf = "pcat_name.errors?.required">Parent category is Required. </div>
+                                
+                            </div>   
+                        </div>
+                    </div>
+
+                    <div class="row"> 
+                        <div class="col-sm-4">															                        
+                            <div class="form-group"  id="sname">       
+								<label for="label-1" class="control-label">Short name<span class="mandatory">*</span></label>               
+                                <input type=text  id="category_short_name"  class="form-control" [(ngModel)]="manageCategories.category_short_name" name="category_short_name" 
+                                maxlength="8"  placeholder="Enter short name"  #short_name="ngModel" [class.is-invalid]="short_name.dirty && short_name.invalid" required>                  
+                                <div class="form-control-key" *ngIf="short_name.dirty || short_name.touched">
+                                    <div class="invalid_error" *ngIf = "short_name.errors?.required">Short name is Required. </div>
+                                    
+                                </div>    
+							</div>
+                        </div>
+                        <div class="col-sm-4">															
+                            <div class="form-group" id="keyindicator">
+                                <label for="label-1" class="control-label">Key indicator<span class="mandatory">*</span></label>
+                                <input type=text  id="key_indicator_percent_11" class="form-control" [(ngModel)]="manageCategories.key_indicator_percent" name="key_indicator_percent"
+                                maxlength="6" pattern="^[0-9]+([.][0-9]{1,2})?$" placeholder="Enter number" #key_indicator="ngModel" [class.is-invalid]="key_indicator.dirty && (manageCategories.key_indicator_percent > 100 || key_indicator.invalid)" required> 
+                                <div class="form-control-key" *ngIf="key_indicator.dirty || key_indicator.touched">
+                                    <div class="invalid_error" *ngIf = "key_indicator.errors?.required">Key indicator is Required. </div>
+                                    <div class="invalid_error" *ngIf = "key_indicator.errors?.pattern" >Please enter number. </div>  
+                                    <div class="invalid_error" *ngIf = "manageCategories.key_indicator_percent > 100"> Value should be less then or equal 100. </div>
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="col-sm-4">															
+                            <div class="form-group" id="complianceindicator">
+                                <label for="label-1" class="control-label">Compliance indicator<span class="mandatory">*</span></label>                                
+                                <input type=text  id="compliance_indicator_percent"  class="form-control" [(ngModel)]="manageCategories.compliance_indicator_percent" name="compliance_indicator_percent"  
+                                maxlength="6" pattern="^[0-9]+([.][0-9]{1,2})?$"  placeholder="Enter number"  #compliance_indicator="ngModel" [class.is-invalid]="compliance_indicator.dirty && (manageCategories.compliance_indicator_percent > 100 || compliance_indicator.invalid)"  required>  
+                                <div class="form-control-key" *ngIf="compliance_indicator.dirty || compliance_indicator.touched">
+                                    <div class="invalid_error" *ngIf = "compliance_indicator.errors?.required">Compliance indicator is Required. </div>
+                                    <div class="invalid_error" *ngIf = "compliance_indicator.errors?.pattern" >Please enter number. </div>  
+                                    <div class="invalid_error" *ngIf = "manageCategories.compliance_indicator_percent > 100"> Value should be less then or equal 100. </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+
+                    <div class="row"> 
+                        <div class="col-sm-6">															
+                            <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="ResetCategory()" >Reset</button>
+                             <!-- <button  class="btn custom-blue-btn" (click)="SaveCategory();"  name="btnSave" [disabled] = "((cat_name.invalid || pcat_name.invalid || short_name.invalid ||  key_indicator.invalid || compliance_indicator.invalid) || (manageCategories.category_name == '' || manageCategories.category_short_name == '' || manageCategories.compliance_indicator_percent == '' || manageCategories.key_indicator_percent == '' ))">Save category</button>  -->
+                             <!-- <button  class="btn custom-blue-btn" (click)="SaveCategory();"  name="btnSave" >Save category</button>  -->
+                            <button id="save1" class="btn custom-blue-btn" *ngIf="manageCategories.Hasparent == 'No'" (click)="SaveCategory();"  name="btnSave" [disabled] = "cat_name.invalid || mandatecategoryfield() ">Save category</button> 
+                            <button id="save2" class="btn custom-blue-btn" *ngIf="manageCategories.Hasparent == 'Yes'" (click)="SaveCategory();"  name="btnSave" 
+                              [disabled] = "cat_name.invalid || pcat_name.invalid || short_name.invalid ||  key_indicator.invalid || compliance_indicator.invalid || manageCategories.compliance_indicator_percent > 100 || manageCategories.key_indicator_percent > 100 || mandatefields()">
+                                Save category
+                            </button> 
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <ag-grid-angular 	name = "agcategory2"
+                                            style="width: 98%; height: 250px;" 
+                                          class="ag-theme-balham"
+                                          [rowData]="rowData1" 
+                                          [columnDefs]="columnDefs1"
+                                          [defaultColDef]="defaultColDef1"
+                                          [gridOptions]="gridOptions1">
+                        </ag-grid-angular>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer modal-1"> 	
+                <button type="button" class="btn custom-cancel-btn" (click)="closeCategory();" >Close</button>  	
+            </div>
+        </div>
+    </div>
+</div>
+</form>

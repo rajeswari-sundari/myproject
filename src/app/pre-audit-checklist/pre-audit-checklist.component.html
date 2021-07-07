@@ -1,0 +1,56 @@
+<div class="row">
+	<div class="col-sm-4">
+		<h4 class="sub-head-title"> Search Pre-audit checklist</h4>
+	</div>
+	<div class="col-sm-8">
+		<div class="custom-btn text-right"> 
+			<button class="btn  custom-blue-btn" (click)="NewAuditChecklist();" > New audit Checklist</button> 
+		</div>
+	</div>
+</div>
+				
+<div class="search-control-table">
+	<div class="search-content-row row"> 
+		<div class="col-sm-3"> 
+			<div class="form-group">
+				<label for="label-1" class="control-label">Customer</label>
+				<select  class="selectpicker show-tick form-control"  [(ngModel)] = "preauditchecklistData.parent_customer_name" name="parent_customer_name">
+					<option  [ngValue] = "" >Select Customer </option>
+                    <option *ngFor = "let cust of parentCustomer" [ngValue] = "" >{{cust.parent_customer_name}} </option>
+				</select>
+			</div>
+		</div>								
+						
+		<div class="col-sm-3">
+			<div class="form-group">
+				<label for="label-1" class="control-label"> Pre-audit checklist ID</label>
+                <input type=text class="form-control" [(ngModel)] = "preauditchecklistData.preaudit_checklist_id" name="preaudit_checklist_id" placeholder="E.g. 1234" >
+			</div>
+		</div>	
+	</div>
+					
+	<div class="custom-btn text-left">
+        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetControls()" name="btnClear" >Clear Search</button>
+        <button  class="btn custom-blue-btn" (click)="Searchaudits();" name="btnSearch" >Search audit</button>
+	</div>
+</div>
+				
+<div class="search-control-list">
+	<div class="row">
+		<div class="col-sm-5">
+			<h4 class="sub-1-head-title">Pre-audit checklist</h4>
+		</div>
+	</div>
+    <div class="row">
+		<ag-grid-angular 	name = "agpreauditchecklist"
+							style="width: 100%; height: 400px;" 
+							class="ag-theme-balham"
+							[rowData]="rowData" 
+							[columnDefs]="columnDefs"
+							[defaultColDef]="defaultColDef">
+		</ag-grid-angular>
+    </div>		
+</div>	
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

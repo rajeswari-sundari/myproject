@@ -1,0 +1,28 @@
+<div class="row" style="width: 1298px;">
+    <div class="col-sm-4">
+        <h4 class="sub-head-title">Controls List</h4>
+    </div>
+</div>
+
+<div class="row">
+    <ag-grid-angular  #agGrid
+                        name = "agIntegration"
+                        style="width: 100%; height: 500px;" 
+                        class="ag-theme-balham"
+                        [rowData]="integrationRow" 
+                        [columnDefs]="integrationColumn"
+                        [defaultColDef]="defaultintegrationColDef"
+                        [overlayLoadingTemplate]="integrationloadingTemplate"
+                        [overlayNoRowsTemplate]="nointegrationRowsTemplate"
+                        >
+    </ag-grid-angular>
+</div>
+<br>
+<br>
+<div class="row">
+    <button type="button" class="btn custom-cancel-btn" (click)="resetData()">Cancel</button>  	
+    <button type="button" class="btn custom-blue-btn" (click)="ValidateAndSave();">Save</button>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner> 

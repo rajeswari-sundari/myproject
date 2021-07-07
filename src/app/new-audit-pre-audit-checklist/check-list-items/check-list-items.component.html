@@ -1,0 +1,84 @@
+<div class="row">
+  <div class="col-sm-10 column-height pad-left">
+    <label for="label-1" class="control-label-1">Selected checklist Items</label>
+  </div>
+  <div class="col-sm-2 column-height pad-left" *ngIf="actionParam !='view'">
+    <label for="label-1" class="control-label-1">
+      <a  class="custom-cancel-btn pad-left-2" style ="margin-left: 0px;" (click)="ShowCheckListItems()" name="checklist" >Select checklist Items</a>
+    </label>
+  </div>
+</div>
+<div class="row">
+  <ag-grid-angular #agchecklist   name = "agchecklist"
+                                  style="width: 98%; height: 250px;" 
+                                  class="ag-theme-balham"
+                                  [rowData]="rowData" 
+                                  [columnDefs]="columnDefs"
+                                  [defaultColDef]="defaultColDef"
+                                  [gridOptions]="gridOptions"
+                                  [overlayLoadingTemplate]="loadingTemplate"
+                                  [overlayNoRowsTemplate]="noRowsTemplate">
+  </ag-grid-angular>
+</div>
+<div class="row" style="margin-top: 20px;">
+  <div class="col-sm-8 pad-left">
+    <div class="custom-btn text-left" *ngIf="actionParam !='view'">          
+      <button type="button" class="btn custom-cancel-btn" (click)="CancelAudit();" >Cancel</button>
+      <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="BacktoNewAudit()" name="btnClear" >Back</button>                       
+      <button  class="btn custom-blue-btn" name="btnSave" (click)="SaveCheckList();" >Save</button>
+      <button  class="btn custom-blue-btn" name="btnSave" (click)="SaveProceedCheckList();">Save & Proceed</button>           
+    </div>
+    <div class="custom-btn text-left" *ngIf="actionParam =='view'">                    
+      <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="BacktoNewAudit()" name="btnClear" >Back</button>                                        
+      <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="NexttoNewAudit()" name="btnClear" >Next</button>                                        
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>
+<!-- ChecklistItems Modal pop-up -->
+<div class="modal fade"  id="CheckListPopup" role="dialog" data-backdrop="static" data-keyboard="false"> 
+  <div class="modal-dialog padding">							
+    <div class="modal-content size">                              
+      <div  class="modal-header">  
+        <h4 class="modal-title pull-left">Select ChecklistItems</h4>  
+        <button type="button" class="close pull-right" (click)=closeCheckList(); aria-label="Close">  
+          <span aria-hidden="true">×</span>  
+        </button>  
+      </div> 
+      <div  class="modal-body"> 
+        <div class="tab-content modal-1"> 		
+          <div class="row">    
+            <ag-grid-angular #aggrid  name = "agselectChecklist"
+                                      style="width: 98%; height: 350px;" 
+                                      class="ag-theme-balham"
+                                      [rowData]="rowData1" 
+                                      [columnDefs]="columnDefs1"
+                                      [defaultColDef]="defaultColDef1"
+                                      [gridOptions]="gridOptions1"
+                                      [suppressRowClickSelection]="true"
+                                      [rowSelection]="rowSelection1">
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer modal-1"> 
+        <div class="custom-btn text-left top">
+          <div class="row">
+            <div class="col-sm-2">
+              <button type="button" class="btn custom-cancel-btn" (click)=closeCheckList();>Close</button> 
+            </div> 
+            <div class="col-sm-3">
+              <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="clearselection()" name="btnClear" >Clear Selection</button>
+            </div>
+            <div class="col-sm-2">
+              <button  class="btn custom-blue-btn" (click)="SelectCheckList();" name="btnSave" >Select</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</div>
+<!-- Popup Closed-->

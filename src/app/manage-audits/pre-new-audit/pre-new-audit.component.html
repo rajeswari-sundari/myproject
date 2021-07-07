@@ -1,0 +1,71 @@
+
+<div class="tab-content"> 
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+            <li class="breadcrumb-item"><a  routerLink="/Manageaudits" >Manage Audits</a> </li>
+            <li class="breadcrumb-item active">New audit</li>
+        </ol>
+    </nav>
+
+    <h2 class="main-head-title"> New audit </h2>
+
+    <div class="classification-radio">
+        <input type="radio" value="Vertical"  name="Classification" [(ngModel)] ="parentCustomersSearchData.p_classification"  (change)="loadDepartments()" required> <span>MBU/Vertical</span> 
+        <input type="radio" value="Practice"  name="Classification" [(ngModel)]="parentCustomersSearchData.p_classification"  (change)="loadDepartments()" required> <span>Service offering/Horizontal</span> 
+    </div>
+
+    <div class="search-content-row row" style="margin: 35px;">
+        <div class="col-sm-3 pad-left">
+            <select  class="selectpicker show-tick form-control"  [(ngModel)] = "parentCustomersSearchData.p_department_group" 
+            #p_department_group="ngModel" name="CustomerID"  required>
+                <option  [ngValue] = "null" >Select</option>
+                <option *ngFor = "let pcl of departments" [ngValue] = "pcl.department_group" >{{pcl.department_group}} </option>
+            </select>
+            <div class="form-control-feedback" *ngIf="p_department_group.errors && (p_department_group.dirty || p_department_group.touched)">
+                <div class="invalid_error" *ngIf = "p_department_group.errors?.required">Department is Required. </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-content-row row" style="margin: 35px;">
+        <div class="col-sm-3 pad-left">
+            <div class="form-group">
+                <label for="label-1" class="control-label">Parent Customer<span class="mandatory">*</span></label>
+                <input type=text class="form-control" name="ParentCustomer" #p_parent_customer_name="ngModel" 
+                [(ngModel)] = "parentCustomersSearchData.p_parent_customer_name" required>
+                <div class="form-control-feedback"
+                    *ngIf="p_parent_customer_name.errors && (p_parent_customer_name.dirty || p_parent_customer_name.touched)">
+                        <div class="invalid_error" *ngIf = "p_parent_customer_name.errors?.required">Parent Customer is Required. </div>
+                </div>
+            </div>    
+        </div>
+        <div class="col-sm-2" style="padding-top: 10px">
+            <br/>
+            <div class="custom-btn text-left">
+                <button  class="btn custom-blue-btn" (click)="getParentCustomer();" [disabled]="p_parent_customer_name.invalid || p_department_group.invalid" name="btnSearch" >Search </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf = "showParentCustomergird" class="gridstyle">
+        <ag-grid-angular    name = "agParentCustomers"
+                            style="width: 100%; height: 400px;" 
+                            class="ag-theme-balham"
+                            [rowData]="parentCustomerRow" 
+                            [columnDefs]="parentCustomerColumn"
+                            [defaultColDef]="defaultParentCustomerColDef"
+                            [gridOptions]="gridOptions"
+                            [rowSelection]="rowSelection">
+        </ag-grid-angular>
+        
+    </div>
+
+    <div class="custom-btn text-left" style="margin: 25px;">
+        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetAuditSearch()" name="btnClear" >Cancel</button>
+        <button  class="btn custom-blue-btn" *ngIf="showProceed" (click)="SaveAudits();" name="btnSearch" >Proceed</button>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+  </ngx-spinner>

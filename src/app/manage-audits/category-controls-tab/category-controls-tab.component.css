@@ -1,0 +1,12 @@
+.size{
+    width: 900px  
+}
+.padding{
+    padding-right: 75%;
+    
+}
+.disabled-btn{
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}

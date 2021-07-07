@@ -1,0 +1,4 @@
+:host /deep/ .ag-cell-value app-custom-radio-group {
+    display: flex;
+    flex-direction: column;
+}

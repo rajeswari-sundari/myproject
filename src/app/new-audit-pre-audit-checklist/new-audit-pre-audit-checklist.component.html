@@ -1,0 +1,84 @@
+<div class="tab-content">  
+  <nav aria-label="breadcrumb" class="breadcumb-nav">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+      <li class="breadcrumb-item"><a  routerLink="/Manageaudits" >Manage Audits</a> </li>
+      <li class="breadcrumb-item"><a routerLink="/Manageaudits/1">Pre-audit checklist</a></li>
+      <li class="breadcrumb-item active">New pre-audit checklist</li>
+    </ol>
+  </nav>
+  <div class="profile-tab-content"> 	
+		<div class="tab-content"> 
+			<div class="row">
+				<div class="col-sm-12">
+          <h4 class="sub-head-title">New pre-audit checklist</h4>
+          <div  *ngIf="newaudit!=null">
+            <div class="row">
+              <div class="col-sm-4"> 
+                <div class="form-group">
+                  <label for="label-1" class="control-label">Choose an audit</label>
+                  <select id="AuditName" [ngClass]="{'disabled-btn':isAdmin}" class="selectpicker show-tick form-control"  [(ngModel)] = "AuditNameData.audit_id" name="audit_name" (change)="ChangeAuditDD();">
+                    <option  [ngValue] = "null" >Select AuditName </option>
+                    <option *ngFor = "let audit of AuditNamefilterDD" [ngValue] = "audit.audit_id" >{{audit.audit_name}} </option>
+                  </select>
+                  <label id="auditerr" style="color: red;"></label>
+                </div> 
+              </div>
+              <div class="col-sm-2 top" *ngIf="actionParam !='view'">
+                <button  class="btn custom-blue-btn" (click)="GetNewAuditList();" name="btnSearch" >Go</button>
+              </div>	
+            </div>
+          </div>
+          <div class="row" *ngIf="AuditNameList!=null">
+            <div class="col-sm-2">
+              <label for="label-1" class="control-label-1">Pre-audit checklist ID</label>
+              <label for="label-1" class="control-label-2">{{AuditNameList[0].preaudit_checklist_id}}</label>
+            </div>
+            <div class="col-sm-2">
+              <label for="label-1" class="control-label-1">Audit name</label>
+              <label for="label-1" class="control-label-2">{{AuditNameList[0].audit_name}}</label>
+            </div>
+            <div class="col-sm-2">
+              <label for="label-1" class="control-label-1">Parent customer</label>
+              <label for="label-1" class="control-label-2">{{AuditNameList[0].parent_customer}}</label>
+            </div>
+            <div class="col-sm-2">
+              <label for="label-1" class="control-label-1">Actual audit date</label>
+              <label for="label-1" class="control-label-2">{{AuditNameList[0].actual_audit_date}}</label>
+            </div>          
+            <div class="col-sm-2">
+              <label for="label-1" class="control-label-1">Delivery partner</label>
+              <label for="label-1" class="control-label-2">{{AuditNameList[0].delivery_partner}}</label>
+            </div>
+          </div>       
+        </div>        
+      </div>         
+    </div>
+    <hr style="border: 1px solid #BDBDBD; margin: 25px 0px;">
+    <div *ngIf="newaudit!=null" class="custom-btn text-left top">
+      <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="CancelProceed();" name="btnClear" >Cancel</button>
+      <button  class="btn custom-blue-btn" (click)="ProceedAudit();" name="btnSearch" >Proceed</button>
+    </div>
+  </div>
+  <!-- <div class="TabMenu_1"> -->
+    <div class="TabMenu_1" *ngIf="tabMenu!=null">
+        <!-- <tabset  #staticTabs class="auditlist-tab">
+          <tab #checklist heading="Checklist items" (select)="Selecttab($event)" id="checklist"><app-check-list-items *ngIf="checklist.active" [data]="AuditNameList" (tabactive)="tabactive($event)"></app-check-list-items></tab>
+          <tab #managePOC heading="Manage Point of contact" (select)="Selecttab($event)" id="managePOC"><app-manage-poc-checklist *ngIf="managePOC.active" [data]="AuditNameList" (tabactive)="tabactive($event)"></app-manage-poc-checklist></tab>
+          <tab #publish heading="Preview & publish" (select)="Selecttab($event)" id="publish"><app-publish-preview-check-list *ngIf="publish.active" [data]="AuditNameList" (tabactive)="tabactive($event)"></app-publish-preview-check-list></tab>
+        </tabset> -->
+      <tabset #tabset  class="auditlist-tab">
+        <tab  *ngFor="let tab of tabsets" [heading]="tab.title" [active]="tab.active" (selectTab)="tab.active=true" (deselect)="tab.active=false">
+          <ng-container [ngSwitch]="tab.ID">
+            <ng-container *ngSwitchCase="1"><app-check-list-items *ngIf="tab.active" [data]="AuditNameList" (tabactive)="tabactive($event)"></app-check-list-items></ng-container>
+            <ng-container *ngSwitchCase="2"> <app-manage-poc-checklist *ngIf="tab.active" [data]="AuditNameList" (tabactive)="tabactive($event)"></app-manage-poc-checklist></ng-container>             
+            <ng-container *ngSwitchCase="3"><app-publish-preview-check-list *ngIf="tab.active"  [data]="AuditNameList" (tabactive)="tabactive($event)"></app-publish-preview-check-list></ng-container>
+          </ng-container>
+        </tab>
+      </tabset>
+    </div>
+  <!-- </div> -->
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

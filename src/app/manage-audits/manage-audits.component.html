@@ -1,0 +1,22 @@
+<div class="page-content"> 
+  <nav aria-label="breadcrumb" class="breadcumb-nav">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+      <li class="breadcrumb-item active">Manage audit</li>
+    </ol>
+  </nav>
+
+  <h2 class="main-head-title"> Manage audit </h2>
+
+  <div class="TabMenu">
+    <tabset #tabset class="productlist-tab">
+      <tab  *ngFor="let tab of tabsets" [heading]="tab.title" [active]="tab.active" (selectTab)="tab.active=true" (deselect)="tab.active=false">
+        <ng-container [ngSwitch]="tab.ID">
+        <ng-container *ngSwitchCase="1"><app-pre-audit  *ngIf="tab.active"></app-pre-audit></ng-container>
+         <ng-container *ngSwitchCase="2"> <app-pre-audit-checklist  *ngIf="tab.active"></app-pre-audit-checklist></ng-container>
+         <ng-container *ngSwitchCase="3"></ng-container>
+        </ng-container>
+      </tab>
+    </tabset>
+  </div>
+</div>

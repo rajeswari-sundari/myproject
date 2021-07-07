@@ -1,0 +1,6 @@
+<select tabindex="0" class="form-select form-control" style="height: auto;
+padding: 3px" [ngClass]="{'my-3': (selectedItem || !params?.mandatory), 'is-invalid': (!selectedItem && params?.mandatory)}" [(ngModel)]="selectedItem" #select="ngModel" (change)="onChange()">
+  <option [value]="''" [selected]="!selectedItem">--Select--</option>
+  <option [value]="item?.Key" *ngFor="let item of optionList">{{ item?.Value }}</option>
+</select>
+<div class="invalid_error mt-1" *ngIf="params?.mandatory && !selectedItem" >Please select a value </div>

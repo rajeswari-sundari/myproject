@@ -1,0 +1,342 @@
+<div class="tab-content">    
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" *ngIf="isRpocApocMdu==true"><a routerLink = "/Accountlandscape">Home</a></li>
+            <li class="breadcrumb-item "><a routerLink="/Mytasks">My tasks</a></li>
+            <li class="breadcrumb-item"><a (click)="BacktoOngoing()">Ongoing audit</a></li>
+            <li class="breadcrumb-item active">Update task</li>
+        </ol>
+    </nav>
+
+    <h2 class="sub-3-head-title"> Ongoing audit </h2>
+
+    <div *ngIf="this.audit_Type=='AUDIT'">
+        <div class="new-audit-data" *ngIf="newOngoingList!=null">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit ID</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].audit_id}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit name</label>
+                    <label for="label-1" class="control-label-2 break-word"> {{newOngoingList[0].audit_name}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Parent customer</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].parent_customer_name}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Actual audit date </label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].actual_audit_date}} </label>
+                </div>
+                <div class="col-sm-4" *ngIf="isRPOC==true">
+                    <label for="label-1" class="control-label-1">Assigned to(RPOC) </label>
+                    <label for="label-1" class="control-label-2" style="color: #0033A0; text-decoration: underline;"> {{newOngoingList[0].responsible_point_of_contact}} </label>
+                </div>
+                <div class="col-sm-4" *ngIf="isRPOC==false">
+                    <label for="label-1" class="control-label-1">Assigned to(APOC) </label>
+                    <label for="label-1" class="control-label-2" style="color: #0033A0; text-decoration: underline;"> {{newOngoingList[0].account_point_of_contact}} </label>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+        <br>
+        <div class="new-audit-data" *ngIf="newOngoingList!=null">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Parent category</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].parent_category_name}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Category</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].category_name}} </label>
+                </div>
+                <div class="col-sm-4">
+                    <label for="label-1" class="control-label-1">Component/Control</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].control_name}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit status</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingList[0].task_status}} </label>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-9">
+                    <label for="label-1" class="control-label-1">Objective</label>
+                    <label for="label-1" class="control-label-2" style="overflow-wrap: break-word;">
+                        {{newOngoingList[0].objective}}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+        <br>
+        <br>
+        <!-- (input)="targetclick(loadauditReadinesslist.target_achieved);" #target_achieved="ngModel"
+        -->
+        <div class="new-audit-data" *ngIf="newOngoingList!=null">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group" *ngIf="isRPOC==true">
+                        <label for = "label-2" class="control-label">Target achieved(%)<span class="mandatory">*</span></label>
+                        <input type="text" class="form-control" name="Target" [(ngModel)]="loadOngoingList.target_achieved" (input)="targetclick(loadOngoingList.target_achieved);"
+                        pattern="[0-9]+" #target_achieved="ngModel" maxlength="3"  placeholder="E.g. 35" required>
+                        <div class="control-label-2" style="font-size: 10px !important;line-height: 10px; color: #9A9898;">Target Value should be less than or equal to 100.</div>
+                        <div class="form-control-feedback" *ngIf="target_achieved.errors && (target_achieved.dirty || target_achieved.touched)">
+                            <div class="invalid_error" *ngIf = "target_achieved.errors?.required">Target Value is Required and should be less than or equal to 100. </div>
+                            <div class="invalid_error" *ngIf = "target_achieved.errors?.pattern" >Enter the values from 0 to 100. </div>
+                        </div>
+                    </div>
+                    <!-- *ngIf="isApoc==true" -->
+                    <div *ngIf="isRPOC==false">
+                        <label for = "label-2" class="control-label">Target achieved(%)<span class="mandatory">*</span></label>
+                        <label for="label-1" class="control-label-2" style="color:  #9A9898;">{{newOngoingList[0].target_achieved}}</label>
+                    </div>
+                </div>
+            </div>
+            <!-- (input)="targetclick(loadauditReadinesslist.RPOC_comments);" #RPOC_comments="ngModel" -->
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group" *ngIf="isRPOC==true">
+                        <label for = "label-2" class="control-label">Comment<span class="mandatory">*</span></label>
+                        <textarea name="Comment" maxlength="1000" placeholder="Enter your comments" [(ngModel)]="loadOngoingList.MDU_comments"
+                        (input)="targetclick(loadOngoingList.MDU_comments);" #MDU_comments="ngModel" required></textarea>
+                        <div class="control-label-2" style="font-size: 10px !important;line-height: 10px; color: #9A9898;">Only 1000 characters are allowed.</div>
+                        <div class="form-control-feedback" *ngIf="MDU_comments.errors && (MDU_comments.dirty || MDU_comments.touched)">
+                            <div class="invalid_error" *ngIf = "MDU_comments.errors?.required">Comments is Required. </div>
+                        </div>
+                    </div>
+                    <!-- *ngIf="isApoc==true" *ngIf="isRPOC==false" -->
+                    <div  *ngIf="isRPOC==false">
+                        <label for = "label-2" class="control-label">Comments<span class="mandatory">*</span></label>
+                        <label for="label-1" class="control-label-2 break-word" style="color: #9A9898;">{{loadOngoingList.MDU_comments}}</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for = "label-2" class="control-label">Evidence [optional]</label>
+                        <label for="label-1" class="control-label-2" style="color: #9A9898;" *ngIf="isRPOC==false">{{newOngoingList[0].evidence}}</label>
+                        <input type="text" class="form-control" name="Evidence" *ngIf="isRPOC==true" [(ngModel)]="loadOngoingList.evidence">
+                    </div>
+                </div>
+                <!-- (change)="onFileSelect2($event)" #hiddenfileinput  (click)="hiddenfileinput.click()"-->
+                <div class="col-sm-2" style="padding-top: 10px" *ngIf="isRPOC==true">
+                    <div class="custom-btn text-left">
+                        <br>
+                        <input style="display: none" type="file" (change)="onFileSelect2($event)" #hiddenfileinput>
+                        <button  class="btn custom-blue-btn" name="btnSearch"  (click)="hiddenfileinput.click()">Browse</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row custom-top">
+                <div class="col-sm-8 pad-left-3">
+                    <!-- *ngIf="isApoc==false" (click)="CancelReadiness()" [ngClass]="{'disabled-btn':isDisabled}"  (click)="SaveReadiness($event)"
+                    -->
+                    <div class="custom-btn text-left" *ngIf="isRPOC==true">
+                        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="CancelOngoing()" name="btnClear" >Cancel</button>
+                        <button  class="btn custom-blue-btn" name="btnSave" [ngClass]="{'disabled-btn':isDisabled}" (click)="SaveOngoing()">Save</button>
+                        <button  class="btn custom-blue-btn" name="btnSubmit" [ngClass]="{'disabled-btn':isDisabled}" (click)="SubmitOngoing()">Submit & Approve</button>
+                    </div>
+                    <!-- *ngIf="isApoc==true" (click)="RejectReadinesstask()" (click)="ApproveReadinesstask()" *ngIf="isMDU==true"-->
+                    <div class="custom-btn text-left" *ngIf="isRPOC==false">
+                        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="RejectOngoing()">Reject</button>
+                        <button  class="btn custom-blue-btn" name="btnSubmit" (click)="ApproveOngoing()">Approve</button>
+                        <!-- <button  class="btn custom-blue-btn" name="btnSubmit" >Submit</button>
+                        <button  class="btn custom-blue-btn" name="btnSubmit" >Submit & approve</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="this.audit_Type=='PREAUDIT'">
+        <div class="new-audit-data" *ngIf="newOngoingChecklist!=null">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit ID</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingChecklist[0].audit_id}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit name</label>
+                    <label for="label-1" class="control-label-2 break-word"> {{newOngoingChecklist[0].audit_name}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Parent customer</label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingChecklist[0].parent_customer_name}} </label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Actual audit date </label>
+                    <label for="label-1" class="control-label-2"> {{newOngoingChecklist[0].actual_audit_date}} </label>
+                </div>
+                <div class="col-sm-4">
+                    <label for="label-1" class="control-label-1">Assigned to(RPOC) </label>
+                    <label for="label-1" class="control-label-2" style="color: #0033A0; text-decoration: underline;"> {{newOngoingChecklist[0].point_of_contact}} </label>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+        <br>
+        <div class="new-audit-data" *ngIf="newOngoingChecklist!=null">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit category</label>
+                    <label for="label-1" class="control-label-2">{{newOngoingChecklist[0].audit_category_name}}</label>
+                </div>
+                <div class="col-sm-2">
+                    <label for="label-1" class="control-label-1">Audit checklist</label>
+                    <label for="label-1" class="control-label-2">{{newOngoingChecklist[0].audit_checklist}}</label>
+                </div>
+                <div class="col-sm-6">
+                    <label for="label-1" class="control-label-1">Task Status</label>
+                    <label for="label-1" class="control-label-2">{{newOngoingChecklist[0].task_status}}</label>
+                </div>
+            </div>
+            <!-- <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-9">
+                    <label for="label-1" class="control-label-1">Comments</label>
+                    <label for="label-1" class="control-label-2" style="overflow-wrap: break-word;">
+                        {{preChecklisttask[0].comments}}
+                    </label>
+                </div>
+            </div> -->
+        </div>
+        
+        <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+        <br>
+        <br>
+        <div class="new-audit-data" *ngIf="newOngoingChecklist!=null">
+            <div class="row">
+                <div class="col-sm-4" *ngIf="isPOC==true">
+                    <div class="form-group auto-calculate">
+                        <label for = "label-2" class="control-label-1">Target achieved(Yes/No)<span class="mandatory">*</span></label>
+                        <!-- <input type="text" class="form-control" name="Target" [(ngModel)]="loadpreauditChecklist.target_achieved"> -->
+                        <input type="radio"  [(ngModel)]="loadOngoingChecklist.target_achieved" name="target_achieved" value="Yes" 
+                        (change)="radioclick();" #target_achieved="ngModel" required>
+                        <span>Yes</span>    
+                        <input type="radio"  [(ngModel)]="loadOngoingChecklist.target_achieved" name="target_achieved" value="No" 
+                        (change)="radioclick();" #target_achieved="ngModel" required>
+                        <span>No</span>
+                        <div class="form-control-feedback">
+                            <div class="invalid_error" *ngIf = "target_achieved.errors?.required">Target is Required. </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4" *ngIf="isPOC==false">
+                    <div class="form-group auto-calculate">
+                        <label for = "label-2" class="control-label-1">Target achieved(Yes/No)<span class="mandatory">*</span></label>
+                        <label for="label-1" class="control-label-2">{{newOngoingChecklist[0].target_achieved}}</label>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row custom-top">
+                <div class="col-sm-8 pad-left-3">
+                    <div class="custom-btn text-left">
+                        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" *ngIf="isPOC==true" (click)="CancelOngoing()">Cancel</button>
+                        <button  class="btn custom-blue-btn" name="btnSave" [ngClass]="{'disabled-btn':isDisabled1}" *ngIf="isPOC==true" (click)="SaveOngoing()">Save</button>
+                        <button  class="btn custom-blue-btn" name="btnSubmit" [ngClass]="{'disabled-btn':isDisabled1}" *ngIf="isPOC==true" (click)="SubmitOngoing()">Submit & Approve</button>
+                        <!-- <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear">Reject</button>
+                        <button  class="btn custom-blue-btn" name="btnSubmit">Approve</button> -->
+                        <button  class="btn custom-cancel-btn" name="btnReject" *ngIf="isPOC==false" (click)="RejectOngoing()">Reject</button>
+                        <button  class="btn custom-blue-btn" name="btnApprove" *ngIf="isPOC==false" (click)="ApproveOngoing()">Approve</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner> 
+<div class="modal fade" id="Approvepopup" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 700px; right: 50px;">                                                           
+            <div  class="modal-header" style="padding-bottom: 0px; padding-top: 0px;">  
+                <button type="button" class="close pull-right"  (click)="CloseApprovePopup();" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+                
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content" style="padding-top: 0px;">
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;" *ngIf="this.audit_Type=='AUDIT'">Approve Ongoing audit readiness task</h4>
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;"*ngIf="this.audit_Type=='PREAUDIT'">Approve Ongoing pre-audit checklist task</h4>
+                    <label for="label-1" class="control-label-2">Are you sure you want to approve the task(s) submitted by RPOC?</label>
+                    <label for="label-1" class="control-label-4">Comments [optional]</label>
+                    <textarea name="comments" maxlength="1000" placeholder="Enter your comments" *ngIf="this.audit_Type=='AUDIT'" [(ngModel)]="loadOngoingList.comments"></textarea>
+                    <textarea name="comments" maxlength="1000" placeholder="Enter your comments" *ngIf="this.audit_Type=='PREAUDIT'" [(ngModel)]="loadOngoingChecklist.comments"></textarea>
+                </div>
+            </div>
+            <hr style="border: 1px solid #BDBDBD; margin: 10px 20px 20px;">
+            <div class="modal-footer" style="margin-left: 10px;">
+                <button class="btn custom-cancel-btn" (click)="CloseApprovePopup();">No</button>
+                <button class="btn custom-blue-btn" name="btnApprove" (click)="ApproveRejectPopup($event);">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Rejectpopup" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 700px; right: 50px;">                                                           
+            <div  class="modal-header" style="padding-bottom: 0px; padding-top: 0px;">  
+                <button type="button" class="close pull-right" (click)="CloseRejectPopup();" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+                
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content" style="padding-top: 0px;">
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;" *ngIf="this.audit_Type=='AUDIT'">Reject Ongoing audit readiness task</h4>
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;" *ngIf="this.audit_Type=='PREAUDIT'">Reject Ongoing pre-audit checklist task</h4>
+                    <label for="label-1" class="control-label-2">Are you sure you want to reject the task(s) submitted by RPOC? Please provide a reason for rejection.</label>
+                    <label for="label-1" class="control-label-4">Comments<span class="mandatory">*</span></label>
+                    <div *ngIf="this.audit_Type=='AUDIT'">
+                        <textarea (input)="rejectaudit(loadOngoingList.comments);" name="Target" maxlength="1000" placeholder="Enter your comments" [(ngModel)]="loadOngoingList.comments"
+                         #RPOC_comments="ngModel" required></textarea>
+                        <div class="form-control-feedback" *ngIf="RPOC_comments.errors && (RPOC_comments.dirty || RPOC_comments.touched)">
+                            <div class="invalid_error" *ngIf = "RPOC_comments.errors?.required">Comments is Required. </div>
+                            <!-- <div class="invalid_error" *ngIf = "RPOC_comments.errors?.pattern" >Enter the Comments without special characters. </div> -->
+                        </div>
+                    </div>
+                    <div *ngIf="this.audit_Type=='PREAUDIT'">
+                        <textarea name="Target" maxlength="1000" placeholder="Enter your comments" [(ngModel)]="loadOngoingChecklist.comments"
+                        (input)="rejectlist(loadOngoingChecklist.comments);" #comments="ngModel" required></textarea>
+                        <div class="form-control-feedback" *ngIf="comments.errors && (comments.dirty || comments.touched)">
+                            <div class="invalid_error" *ngIf = "comments.errors?.required">Comments is Required. </div>
+                            <!-- <div class="invalid_error" *ngIf = "comments.errors?.pattern" >Enter the Comments without special characters. </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr style="border: 1px solid #BDBDBD; margin: 10px 20px 20px;">
+            <div class="modal-footer" style="margin-left: 10px;">
+                <button class="btn custom-cancel-btn" (click)="CloseRejectPopup();">No</button>
+                <button class="btn custom-blue-btn" name="btnReject" (click)="ApproveRejectPopup($event);" *ngIf="this.audit_Type=='AUDIT'" [disabled] = "(loadOngoingList.comments == '')">Yes</button>
+                <button class="btn custom-blue-btn" name="btnReject" (click)="ApproveRejectPopup($event);" *ngIf="this.audit_Type=='PREAUDIT'" [disabled] = "(loadOngoingChecklist.comments == '')">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+    [disabled] = "target_achieved.invalid || RPOC_comments.invalid"
+-->

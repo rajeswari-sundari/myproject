@@ -1,0 +1,13 @@
+<div>
+    <span class="edit-icon"  *ngIf="editcontrollinkId == 'edit_category'" >
+        <img   src="/Bundles/assets/noun-edit.png" (click)="EditCategoryMethod()" >
+        <div>Edit</div>
+    </span>
+</div>
+
+<div>
+    <span class="edit-icon"  *ngIf="editcontrollinkId == 'parent_category_id'">
+        <img   src="/Bundles/assets/noun-edit.png" (click)="AddEditControl()" >
+        <div>Edit</div>
+    </span>
+</div>

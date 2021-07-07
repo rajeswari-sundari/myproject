@@ -1,0 +1,334 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+/* CSS Document */
+
+/* CSS Reset Original Document*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+sup {
+    vertical-align: super !important;
+}
+
+sub {
+    vertical-align: sub !important;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+    blockquote:before, blockquote:after, q:before, q:after {
+        content: '';
+        content: none;
+    }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    /* display: block; */
+    cursor: pointer;
+    text-decoration: none;
+    color: #999;
+}
+
+    a:hover {
+        text-decoration: none;
+    }
+a:visited, a:active, a:link  {
+    text-decoration: none;
+}
+.cboth {
+    margin: 0px !important;
+    padding: 0px !important;
+    height: 0px !important;
+    line-height: 0 !important;
+    clear: both !important;
+}
+
+html, body {
+    height: 100%;
+    background: #ECF0F5;
+    /* font-family: Lato-Regular; */
+    font-family: TT Norms;
+    -ms-overflow-y:visible !important;  
+    overflow-y :visible;
+}
+/* End of CSS Reset */
+@font-face {
+    font-family: 'TTNorms-Regular';
+     src: url('../resources/fonts/TTNorms-Regular.otf') format("opentype"); 
+    /* src: url('../fonts/Lato-Regular.woff') format("woff"); */
+} 
+
+/* @font-face {
+    font-family: 'Lato-Light';
+    src: url('../resources/fonts/Lato-Light.ttf') format("opentype"); */
+    /*src: url('../fonts/Lato-Light.woff') format("woff");*/
+/* } */
+
+/* @font-face {
+    font-family: 'Lato-Hairline';
+    src: url('../resources/fonts/Lato-Hairline.ttf') format("opentype");
+    /*src: url('../fonts/Lato-Extralight.woff') format("woff");*/
+/*} */
+
+/* @font-face {
+    font-family: 'Lato-Hairline';
+    src: url('../resources/fonts/Lato-Hairline.ttf') format("opentype");
+    /*src: url('../fonts/Lato-Ultralight.woff') format("woff");*/
+/*} */
+
+/* @font-face {
+    font-family: 'Lato-Bold';
+    src: url('/resources/fonts/Lato-Bold.ttf') format("opentype"); */
+    /*src: url('../fonts/Lato-Bold.woff') format("woff");*/
+/*}
+
+@font-face {
+    font-family: 'Lato-Semibold';
+    src: url('../resources/fonts/Lato-Semibold.ttf') format("opentype");
+    /*src: url('../fonts/Lato-Semibold.woff') format("woff");*/
+/*}*/
+
+
+body {
+    width: 100%;
+    overflow-x: hidden;
+    /* font-family: 'Lato-Regular'; */
+    font-family: 'TT Norms';
+    font-style: normal;
+    font-variant: normal;
+	background:#eef4ff;
+}
+
+.wrapper {
+    background-color:#eceef1;
+    height: 100%;
+    position: relative;
+}
+
+.header{ height:50px; background:#0033a0; color:#FFF;padding: 10px 20px 0 20px;    }
+.header-title
+{ 
+    padding-top:5px;
+    font-size: 20px; 
+    /* background: url( ../resources/images/menu.PNG) no-repeat 2px 2px; */
+    padding-left:60px;
+    margin: 1px !important;
+    font-weight: bold;
+}
+.sub-head-title{font-size: 20px;    margin-bottom: 5px; font-weight: bold;}
+.tab-content {
+    background: #FFF;
+    min-height: 300px;
+	padding:20px;
+}
+
+.header-right >a {
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+    background-size: 25px;
+    margin-left: 21px;
+	margin-top: 4px;
+}
+.header-help { background-image: url(../resources/images/help.PNG);}
+.header-notify { background-image: url(../resources/images/notification.svg);}
+
+.productlist-tab {
+    text-align: left;
+    height: 48px;
+    margin: -4px auto;
+}
+ul.productlist-tab li {
+    min-width: 12%;
+    text-align: center;
+    margin-left: 0px;
+	padding: 0px;
+    display: inline-block;
+    float: none;
+    vertical-align: middle;
+}
+.productlist-tab > li a {
+    padding: 12px 0;
+    margin-left: 0px;
+    line-height: 20px;
+    display: block;
+    border-radius: 5px 5px 0 0;
+}
+ul.productlist-tab li a:hover, ul.productlist-tab li.active a {
+    background-color: #FFF !important;
+    color: #071D49 !important;
+    border-bottom: none;
+}
+ul.productlist-tab li a span {
+    padding: 0px 5px 6px 0px;
+    display: inline-block;
+   font-size: 18px;
+    font-weight: bold;
+    color: #071D49;
+}
+ul.productlist-tab li.active a span, ul.productlist-tab li a:focus span, ul.productlist-tab li a:hover span {
+    color: #071D49;
+}
+.TabMenu {
+    margin-top: 10px;
+}
+.custom-blue-btn, .custom-cancel-btn,.custom-normal-btn {
+    text-align: center;
+    background-color: #0033a0 !important;
+    color: #fff !important;
+    border: 0px;
+    padding: 6px 15px !important;
+    min-width: 130px;
+    margin-left: 20px;
+    margin-bottom: 15px;
+    border: 2px solid #0033a0;
+    font-weight: bold;
+    font-size: 14px;
+}
+.custom-normal-btn { background-color: #FFF !important; color: #071D49 !important; margin-left:0;}
+.control-label {
+    margin-bottom: 5px;
+    display: block;
+    color: #484747;
+    font-size: 16px/19px;
+    font-weight: normal; 
+      
+}
+
+.edit-icon {
+   
+    background: url(../resources/images/edit.svg) no-repeat;
+	width:25px;
+	height:25px;
+	background-size:50%;
+	margin:0 auto;
+}
+.search-control-table {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 20px;
+}
+.control-table{ margin-top:20px;}
+.control-table thead{ background:#0033a0;}
+.control-table th{ color:#FFF;}
+.main-head-title {
+    font-size: 25px;
+    margin:10px 0 20px 25px;
+    font-weight: bold;
+}
+.breadcum-nav{background:none;}
+.breadcrumb {
+    background-color: #eceef1;margin-left: 10px;
+}
+.table tbody tr:nth-child(even) {
+    background: #F5F6FA;
+}
+.table tbody tr:nth-child(odd) {
+    background: #FFF;
+}
+
+.ag-theme-balham .ag-header-row 
+{
+    background: #0033a0;
+    color: #fff !important;
+}
+.ag-header-icon 
+{
+    color: #fff !important;
+}
+
+.nav .active 
+{
+    border-top : 2px solid #0033a0;
+}
+.page-content
+{
+    margin : 0.20px;
+    
+}
+.nav-caption{
+    display: inline-block;
+    padding-left: 6px;
+}
+
+/* .cdk-overlay-container
+{
+    position: absolute !important;
+   
+}  */
+/* .cdk-overlay-pane {
+   
+} */
+/* .mat-menu-panel .menuitem 
+{
+    margin-top: -100px;
+} */
+
+.mat-dialog-container{
+    padding: 0px !important
+}
+ 
+.custom-tooltip {
+    position: absolute;
+    width: 150px;
+    height: 70px;
+    border: 1px solid cornflowerblue;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 1s;
+  }
+  
+  .custom-tooltip.ag-tooltip-hiding {
+    opacity: 0;
+  }
+  
+  .custom-tooltip p {
+    margin: 5px;
+    white-space: nowrap;
+  }
+  
+  .custom-tooltip p:first-of-type {
+    font-weight: bold;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+

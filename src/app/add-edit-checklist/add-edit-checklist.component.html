@@ -1,0 +1,72 @@
+<div class="page-content">  
+  <nav aria-label="breadcrumb" class="breadcumb-nav">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+      <li class="breadcrumb-item "><a routerLink = "/Managecontrols" >Manage Controls</a></li>
+      <li class="breadcrumb-item active">Add or edit checklist</li>
+    </ol>
+  </nav>
+  <div class="profile-tab-content">
+    <div class="tab-content">
+      <div id="tab-1">
+        <div class="row">
+          <div class="col-sm-4">
+            <h4 class="sub-head-title"> Add or edit CheckList </h4>
+          </div>
+        </div>
+        <div class="search-control-table"> 
+          <div class="search-content-row row">
+            <div class="col-sm-3"> 
+              <div class="form-group">
+                <label for="label-1" class="control-label"> Category</label>
+                <input type=text class="form-control" [(ngModel)] = "auditCategoryName"  name="Category" readonly >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" role="alert">  
+          <div class="col-sm-8 alert alert-danger" *ngIf="errorMessage" >
+            <span  class=""  >{{errorMessage}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <h4 class="sub-2-head-title">Checklist items  </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <table class=" table control-table">
+              <thead> 
+                <tr>
+                  <th> Item <span class="mandatory">*</span></th>
+                  <th> </th> 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor = "let audit of AuditList; let checklistIndex=index;" >
+                  <td>
+                    <label for="label-1" class="control-label"> Item name <span class="mandatory">*</span></label>
+                    <input type=text class="form-control" [(ngModel)] = "audit.audit_checklist"  name="audit.audit_checklist" #audit_checklist="ngModel" [class.is-invalid]=audit_checklist.invalid required>
+                    <div class="invalid_error" *ngIf = "audit_checklist.errors?.required" >Checklist Item is required</div>
+                  </td>
+                  <td style="vertical-align: middle;"> 
+                    <mat-icon  *ngIf = "checklistIndex === AuditList.length - 1" (click)="AddChecklist();" name="btnAddChecklist" >add_circle</mat-icon>
+                    <mat-icon *ngIf = "!(AuditList.length - 1 === 0)" (click)="DeleteChecklist(checklistIndex);" >delete_outline</mat-icon>    
+                  </td> 
+                </tr>
+              </tbody>
+            </table>   
+          </div>
+        </div>
+      </div>
+      <div class="custom-btn text-left">
+        <button  class="btn custom-cancel-btn" [routerLink]="'/Managecontrols/D'" style ="margin-left: 0px;"  name="btnClear" >Cancel</button>
+        <button  class="btn custom-blue-btn" (click)="SaveCheckList();" name="btnSearch" >Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+  <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

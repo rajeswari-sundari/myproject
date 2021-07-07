@@ -1,0 +1,159 @@
+<div class="row">
+    <div class="col-sm-3 pad-left-3"> 
+        <div class="form-group">
+            <label for="label-1" class="control-label"> Parent Category</label>
+            <select  class="selectpicker show-tick form-control" name="ParentCategoryID" (change)='LoadManagemetricCategory()' [(ngModel)]="auditcontrol.p_parent_category_id">
+                <option  [ngValue] = "null" >Select ParentCategory </option>
+                <option *ngFor="let pcl of parentCategories" [ngValue]="pcl.parent_category_id">{{pcl.parent_category_name}} </option>               
+            </select>
+        </div>
+    </div>		
+    <div class="col-sm-3"> 
+        <div class="form-group">
+            <label for="label-1" class="control-label"> Category</label>
+            <select  class="selectpicker show-tick form-control" name="CategoryID" 
+            [(ngModel)]="auditcontrol.p_category_id">
+            <option  [ngValue] = "null" >Select Category </option>
+            <option  *ngFor="let pcl of Categories" [ngValue]="pcl.category_id">{{pcl.category_name}}</option>
+            </select>          				
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label for="label-1" class="control-label"> Control</label>
+            <input type=text class="form-control"  [(ngModel)]="auditcontrol.p_control_name"
+            name="Control" placeholder="E.g. Project Plan available" maxlength="200">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="custom-btn text-left">
+        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="ResetManageControls()" >Clear search</button>
+        <button  class="btn custom-blue-btn" name="btnSearch" (click)="SearchManageControls()">Search controls</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-9">
+        <!-- <label for="label-1" class="control-label-1">Selected categories & controls</label> -->
+    </div>
+    <div class="col-sm-3" >
+        <button  class="btn custom-blue-btn" style="float: right;" name="btnSearch" (click)="ExportGrid()">Export</button>
+        <button [ngClass]="{'disabled-btn':isAdmin}" class="btn custom-blue-btn" style="float: right;" name="btnSearch" (click)="ImportContact()">Import</button>
+    </div>
+</div>
+<div class="row">
+     <ag-grid-angular 	name = "agSample1"
+                        style="width: 98%; height: 400px;" 
+                        class="ag-theme-balham"
+                        [rowData]="rowData" 
+                        [columnDefs]="columnDefs"
+                        [defaultColDef]="defaultColDef"
+                        [overlayLoadingTemplate]="loadingTemplate"
+                        [overlayNoRowsTemplate]="noRowsTemplate"
+                        [gridOptions]="gridOptions">
+                         
+    </ag-grid-angular>
+</div>
+<div class="row" style="margin-top: 20px;">
+    <div class="col-sm-8">
+        <div class="custom-btn text-left">
+            <button  *ngIf="isAdmin==false"  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="CancelAudit()" >Cancel</button>
+            <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="GoToPrevious()">Back</button>
+            <button *ngIf="isAdmin==true" class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="Next()">Next</button>
+            <button  *ngIf="isAdmin==false"  class="btn custom-blue-btn" name="btnSearch" (click)="SavePOC()" >Save</button>
+            <button  *ngIf="isAdmin==false"   class="btn custom-blue-btn" name="btnSearch" (click)="SaveProceed()">Save &amp; proceed</button>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>
+<div class="modal fade" id="ImportContactPopup" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 895px; right: 170px;">                                                           
+            <div  class="modal-header">  
+                <h4 class="modal-title tab-left-1">Import contacts</h4>  
+                <button type="button" class="close pull-right" (click)=closeImportContact(); aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content">
+                    
+                    <div class="row">
+                        <p class="import-contact">
+                            Use the same template you exported, after you have populated the controls with relevant contacts for controls. 
+                            Please note you need to enter the associate IDs for APOC, RPOC & additional contact for email. 
+                            APOC & RPOC are mandatory, however Additional contact is optional. 
+                            Please do not change the control id or control name column. 
+                            If the data in the file has one or more error, upload will not be done.
+                        </p>
+                    </div>
+
+                    <div class="row" style="margin-top: 2%; margin-left: 25%;">
+                        <div class="col-sm-5">
+                            <div class="form-group">
+                                <input type="text" [(ngModel)]="POCFileName" style="width: 250px;" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="custom-btn text-left">
+                                <input style="display: none" type="file" (change)="onFileSelect($event)" #hiddenfileinput>
+                                <button  class="btn custom-blue-btn" name="btnSearch" (click)="hiddenfileinput.click()" >Browse</button>
+                                <button  class="btn custom-blue-btn" name="btnSearch" (click)="UploadFile()">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="hr-line-1">
+                </div>
+
+                <div *ngIf="message==0" class="row">
+                    <div class="loading">
+                    </div>
+                    <span class="load-data">
+                        Processing file....Please wait
+                    </span>
+                </div>
+                <div *ngIf="message==1" class="row">
+                    <div class="loading-1">
+                    </div>
+                    <span class="load-data-1">
+                        Your file has been upload successfully! <br>
+                        {{errorlist}} records have been updated in the system
+                    </span>
+                </div>
+                <div *ngIf="message==2" class="row">
+                    <div class="loading-2">
+                    </div>
+                    <span class="load-data-2">
+                        Your file has not been upload successfully! <br>
+                        There are one or more errors in the following rows {{errorlist}} <br>
+                        Please rectify the errors and reinitiate the upload process.
+                    </span>
+                </div>
+                <div *ngIf="message==3" class="row">
+                    <div class="loading-2">
+                    </div>
+                    <span class="load-data-2">
+                        Your file has not been upload successfully! <br>
+                        There are one or more errors <br>
+                        Please rectify the errors and reinitiate the upload process.
+                    </span>
+                </div>
+                <div *ngIf="message==5" class="row">
+                    <div class="loading-2">
+                    </div>
+                    <span class="load-data-2">
+                        Invalid Filetype! <br>
+                        Import should accept only .xlsx files! <br>
+                        Please upload proper format file.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn custom-cancel-btn" (click)="closeImportContact();">Done</button>
+            </div>
+        </div>
+    </div>
+</div>

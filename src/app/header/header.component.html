@@ -1,0 +1,38 @@
+<div class="header" >
+    <div class="row">
+      <div class="col-sm-8">
+        <div *ngIf="RpocApoc==false">
+          <div id="mySidepanel"   class="sidepanel">
+            <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a>
+            <h2 class="main-nav-title"> Main menu</h2>
+            <hr style="margin: 20px; color: #C5C5C5;">
+            <a routerLink="/Accountlandscape" (click)="closeNav()"> <img src="/Bundles/assets/landscape.svg" alt="" class="menu_icon">Account landscape</a>
+            <a routerLink="/Managecontrols"(click)="closeNav()" ><img class="menu_icon" src="/Bundles/assets/control.svg" alt="">Manage controls</a>
+            <a routerLink="/Manageaudits" (click)="closeNav()" ><img src="/Bundles/assets/audit.svg" alt="" class="menu_icon">Manage audit</a>
+            <a routerLink="/Mytasks" (click)="closeNav()"><img src="/Bundles/assets/regulation.svg" alt="" class="menu_icon">My tasks</a>
+            <a routerLink="/Managecontrols" (click)="closeNav()"><img src="/Bundles/assets/todo.svg" alt="" class="menu_icon">Manage knowledge base</a>
+          </div>
+        </div>
+
+        <div *ngIf="RpocApoc==true">
+          <div id="mySidepanel"   class="sidepanel">
+            <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a>
+            <h2 class="main-nav-title"> Main menu</h2>
+            <hr style="margin: 20px; color: #C5C5C5;">
+            <a routerLink="/Accountlandscape" (click)="closeNav()"> <img src="/Bundles/assets/landscape.svg" alt="" class="menu_icon">Account landscape</a>
+            <a routerLink="/Mytasks" (click)="closeNav()"><img src="/Bundles/assets/regulation.svg" alt="" class="menu_icon">My tasks</a>
+          </div>
+        </div>
+        
+        <button class="openbtn" (click)="openNav()" *ngIf="loggedUser != null" >☰</button>
+          <span class="header-title"> Audit Readiness Tool</span>
+      </div>
+      <div class="col-sm-4 text-right">
+        <div class="header-right">
+          <a class="header-help" href="javascript:void(0)"></a>
+          <a class="header-notify" href="javascript:void(0)"></a>
+        </div>
+      </div>
+    </div>
+    
+  </div>

@@ -1,0 +1,369 @@
+<div class="page-content">  
+	<nav aria-label="breadcrumb" class="breadcumb-nav">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+			<li class="breadcrumb-item active">Manage Controls</li>
+		</ol>
+	</nav>
+	
+	<h2 class="main-head-title"> Manage Controls </h2>
+	
+	<div class="TabMenu">
+		<ul class="nav nav-pills productlist-tab">
+			<li id="preaudit" class=""><a data-toggle="pill" href="#tab-1" (click)="PreAudit();"><span>  For pre-audit</span></a></li> 
+			<li id="duringaudit" class=""><a data-toggle="pill" href="#tab-2" (click)="DuringAudit();"><span>   For during Audit</span></a></li>
+		</ul>
+	</div>	
+				
+	<div class="profile-tab-content"> 	
+		<div class="tab-content"> 
+			<div id="tab-1" >
+				<div class="row">
+					<div class="col-sm-4">
+						<h4 class="sub-head-title"> Search Controls</h4>
+					</div>
+													
+					<div class="col-sm-8">
+						<div class="custom-btn text-right">
+							<button class="btn custom-blue-btn"  (click)="AddMetricsDefinition();"> Metrics definition </button> 
+							<button class="btn  custom-blue-btn"  (click)="ManageCategory();"> Manage categories </button> 	
+						</div>
+					</div>
+				</div>
+				
+				<div class="search-control-table">
+					<div class="search-content-row row"> 
+						<div class="col-sm-3"> 
+							<div class="form-group">
+								<label for="label-1" class="control-label"> Parent Category</label>
+								<select  class="selectpicker show-tick form-control"  [(ngModel)] = "manageControlsSearchData.ParentCategoryID" name="ParentCategoryID" (change)=LoadCategory(); >
+									<option  [ngValue] = "0" >Select ParentCategory </option>
+                                    <option *ngFor = "let pcl of parentCategories" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+                                </select>
+							</div>
+						</div>
+															
+						<div class="col-sm-3"> 
+							<div class="form-group">
+								<label for="label-1" class="control-label"> Category</label> 
+                                <select  class="selectpicker show-tick form-control"  [(ngModel)] = "manageControlsSearchData.CategoryID" name="CategoryID" >
+									<option  [ngValue] = "0" >Select Category </option>
+                                    <option *ngFor = "let pcl of Categories" [ngValue] = "pcl.Key" >{{pcl.Value}} </option>
+                                </select>			
+							</div>
+						</div>
+														
+						<div class="col-sm-3"> 
+							<div class="form-group">
+								<label for="label-1" class="control-label"> Control</label>
+                                <input type=text class="form-control" [(ngModel)] = "manageControlsSearchData.Control" name="Control" placeholder="E.g. Project Plan available (max:200 char)" maxlength="200" >					
+							</div>
+						</div>
+	
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="label-1" class="control-label"> Weightage(%) </label>
+								<input type=text class="form-control" [(ngModel)] = "manageControlsSearchData.Weightage" name="Weightage" placeholder="E.g. 0.5" >
+							</div>
+						</div>	
+					</div>
+						
+					<div class="custom-btn text-left">
+                        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetControls()" name="btnClear" >Clear Search</button>
+                        <button  class="btn custom-blue-btn" (click)="SearchControls();" name="btnSearch" >Search Controls</button>
+					</div>
+				</div>
+												
+				<div class="search-control-list">
+					<div class="row">
+						<div class="col-sm-5">
+							<h4 class="sub-1-head-title"> Control List</h4>
+							<span class = "total">Overall weightage: {{overallweightage}}</span>
+						</div>
+					</div>
+												
+					<div class="row">
+						<ag-grid-angular 	name = "agSample1"
+											style="width: 98%; height: 400px;" 
+											class="ag-theme-balham"
+											[rowData]="rowData" 
+											[columnDefs]="columnDefs"
+											[defaultColDef]="defaultColDef"
+											[tooltipShowDelay]="tooltipShowDelay"
+											[frameworkComponents]="frameworkComponents">
+						</ag-grid-angular>
+                    </div>		
+				</div>	
+			</div>
+										
+			<div id="tab-2" class="tab-pane"> 
+				<div class="search-control-list">
+					<div class="row">
+						<div class="col-sm-5">
+							<h4 class="sub-head-title"> Pre-audit checklist	</h4>									
+						</div>
+					</div>
+
+					<div class="row">
+						<ag-grid-angular 	name = "agSample1"
+											style="width: 98%; height: 200px;" 
+											class="ag-theme-balham"
+											[rowData]="rowDataD" 
+											[columnDefs]="columnDefsD"
+											[defaultColDef]="defaultColDefD">
+						</ag-grid-angular>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>	
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>
+<div class="modal fade" id="Categorypopup" role="dialog" data-backdrop="static" data-keyboard="false"> 
+	<div class="modal-dialog">							
+		<div class="modal-content size">															  
+		   	<div  class="modal-header">  
+		  		<h4 class="modal-title pull-left">Manage Categories</h4>  
+		  		<button type="button" class="close pull-right" (click)=closeCategory(); aria-label="Close">  
+					<span aria-hidden="true">×</span>  
+		  		</button>  
+			</div> 
+
+			<div  class="modal-body"> 
+			  	<div class="tab-content modal-1"> 		
+					<div class="row"> 
+				 		<div class="col-sm-3">															
+							<div class="form-group">       
+								<label for="label-1" class="control-label">Category</label>               
+								<input type=text  id="category" class="form-control" [(ngModel)]="manageCategories.category_name" name="category_name" (keypress)="changecategory(manageCategories.category_name);" placeholder="Category" >                  
+								<label id="laberrcat" style="color: red;" class="control-label"></label>        
+							</div>
+						</div>
+						  
+						<div class="col-sm-3 radio_nav"> 
+							<div class="form-group auto-calculate">  
+								<label for="label-1" class="control-label"> Has a Parent</label>
+								<input type="radio"   [(ngModel)]="manageCategories.Hasparent" name="radio" value="Yes" (change)="radioParent();" ><span>Yes</span>    
+								<input type="radio"  [(ngModel)]="manageCategories.Hasparent" name="radio" value="No" (change)="radioParent();"><span>No</span>
+							</div>                
+						</div>
+
+						<div class="col-sm-4"> 
+							<div id="ParentID" class="form-group">
+								<label for="label-1" class="control-label"> Parent Category</label>
+								<select id="Parent" class="selectpicker show-tick form-control" [(ngModel)]="manageCategories.parent_category_id"  name="manageCategories.parent_category_id"  (change)="manageparent();">
+						  			<option  [ngValue] = null >Select ParentCategory </option>
+									<option *ngFor = "let pc of manageparentCategories" [ngValue] = "pc.Key" >{{pc.Value}} </option>
+								</select>
+								<label id="laberrpar" style="color: red;" class="control-label"></label>
+							</div>
+						</div>
+					</div>
+		  
+					<div class="custom-btn text-left">
+			  			<div class="row"> 
+				  			<div class="col-sm-1">
+								<button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetCategory()" name="btnClear" >Reset</button>
+							</div>
+							  
+				 			<div class="col-sm-1">
+				 				<button  class="btn custom-blue-btn" (click)="SaveCategory();" name="btnSave" >Save Category</button>
+				 			</div>
+						</div>
+					</div>
+
+					<div class="row">
+				  		<ag-grid-angular 	name = "agcategory2"
+				  							style="width: 98%; height: 250px;" 
+											class="ag-theme-balham"
+											[rowData]="rowData1" 
+											[columnDefs]="columnDefs1"
+											[defaultColDef]="defaultColDef1"
+											[gridOptions]="gridOptions1">
+				  		</ag-grid-angular>
+		  			</div>
+				</div>    
+			</div>
+			   
+		   	<div class="modal-footer modal-1"> 	
+				<button type="button" class="btn custom-cancel-btn" (click)=closeCategory();>Close</button>  	
+			</div> 
+		</div>
+	</div>	  
+</div>
+
+<div class="modal fade" id="Metricspopup" role="dialog" data-backdrop="static" data-keyboard="false"> 
+    <div class="modal-dialog">                          
+        <div class="modal-content size">
+            <div  class="modal-header">  
+                <h4 class="modal-title pull-left">Define metrics</h4>  
+                <button type="button" class="close pull-right" (click)=closeMetrics(); aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+			</div> 
+					
+            <div class="modal-body"> 
+                <div class="tab-content modal-1">       
+                    <div class="row"> 
+                        <div class="col-sm-3">                                                          
+                            <div class="form-group">         
+                                <label for="label-1" class="control-label">Control</label>              
+                            </div>
+						</div>
+						
+                        <div class="col-sm-9">
+                            <label for="label-1" class="control-label" style="word-break: break-all;" >{{metricscontrolData.control_name}} </label>
+                        </div>
+					</div>
+					
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="label-2" class="control-label">Metrics type</label>
+							</div>
+						</div>
+						
+                        <div class="col-sm-4">
+                            <div class="auto-calculate">
+                                <input type="radio"   name="radio" value="Range"  [(ngModel)]="metricscontrolData.metrics_type" ><span>Range</span>
+                                <input type="radio"   name="radio" value="Number"  [(ngModel)]="metricscontrolData.metrics_type" checked="checked" > <span>Number</span> 
+                            </div>
+                        </div>
+					</div>
+
+					<div class="row" role="alert">
+						<div class="col-sm-2">
+					</div>
+
+					<div class="col-sm-8 alert alert-danger" *ngIf="errorMessage" >
+						<span  class=""  >{{errorMessage}}</span>
+					</div>
+
+					<div class="col-sm-2"></div>
+				</div>
+
+                <div class="row">
+                    <table class="table control-table">
+                        <thead> 
+                            <tr>
+                                <th class="tb-left">Readiness type</th>
+                                <th *ngIf="metricscontrolData.metrics_type === 'Number'" >Value </th>
+                                <th *ngIf="metricscontrolData.metrics_type === 'Range'" >From Value</th>
+                                <th *ngIf="metricscontrolData.metrics_type === 'Range'" >To Value</th>
+                            </tr>
+						</thead>
+						
+                        <tbody>
+                            <tr>
+                                <td class="tb-left">
+                                	<label for="label-3" class="control-label">Cliff (%)</label>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Number'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.cliff_percentNumber"    #cliffPerNum = "ngModel" [class.is-invalid]="cliffPerNum.invalid && cliffPerNum.touched" pattern="^[0-9]*$" maxlength="2"  required />
+									<div class="invalid_error" *ngIf = "cliffPerNum.errors?.required && cliffPerNum.touched" >Value is required. </div>
+									<div class="invalid_error" *ngIf = "cliffPerNum.errors?.pattern && cliffPerNum.touched" >Value is invalid. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex"  [(ngModel)] ="metricscontrolData.cliff_percentRange1" #cliffPerRange1 = "ngModel" [class.is-invalid]="cliffPerRange1.invalid && cliffPerRange1.touched" pattern="^[0-9]*$" maxlength="2" required />
+									<div class="invalid_error" *ngIf = "cliffPerRange1.errors?.required && cliffPerRange1.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "cliffPerRange1.errors?.pattern && cliffPerRange1.touched" >Value is invalid. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.cliff_percentRange2" #cliffPerRange2 = "ngModel" [class.is-invalid]="cliffPerRange2.invalid && cliffPerRange2.touched" pattern="^[0-9]*$" maxlength="2" required />
+									<div class="invalid_error" *ngIf = "cliffPerRange2.errors?.required && cliffPerRange2.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "cliffPerRange2.errors?.pattern && cliffPerRange2.touched" >Value is invalid. </div>
+                                </td>
+							</tr>
+							
+                            <tr>
+                                <td class="tb-left">
+                                    <label for="label-3" class="control-label">Needs improvement</label>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Number'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.need_improvement_percentNumber"  #needsImpPerNum = "ngModel"  [class.is-invalid]="needsImpPerNum.invalid && needsImpPerNum.touched" maxlength="2" pattern="^[0-9]*$"  required />
+									<div class="invalid_error" *ngIf = "needsImpPerNum.errors?.required && needsImpPerNum.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "needsImpPerNum.errors?.pattern && needsImpPerNum.touched" >Value is invalid. </div>
+                                </td>
+								
+								<td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.need_improvement_percentRange1"  #needsImpPerRange1 = "ngModel" [class.is-invalid]="needsImpPerRange1.invalid && needsImpPerRange1.touched " maxlength="2" pattern="^[0-9]*$"  required />
+									<div class="invalid_error" *ngIf = "needsImpPerRange1.errors?.required && needsImpPerRange1.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "needsImpPerRange1.errors?.pattern && needsImpPerRange1.touched" >Value is invalid. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_coValuentrolIndex" [(ngModel)] ="metricscontrolData.need_improvement_percentRange2"  #needsImpPerRange2 = "ngModel" [class.is-invalid]="needsImpPerRange2.invalid && needsImpPerRange2.touched" maxlength="2" pattern="^[0-9]*$"   required />
+									<div class="invalid_error" *ngIf = "needsImpPerRange2.errors?.required && needsImpPerRange2.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "needsImpPerRange2.errors?.pattern && needsImpPerRange2.touched" >Value is invalid. </div>
+                                </td>
+							</tr>
+							
+                            <tr>
+                                <td class="tb-left">
+                                    <label for="label-3" class="control-label">Partially ready</label>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Number'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.partially_ready_percentNumber"  #partiallyReadyNum = "ngModel" [class.is-invalid]="partiallyReadyNum.invalid && partiallyReadyNum.touched" pattern="^[0-9]*$" maxlength="2"   required />
+									<div class="invalid_error" *ngIf = "partiallyReadyNum.errors?.required && partiallyReadyNum.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "partiallyReadyNum.errors?.pattern && partiallyReadyNum.touched" >Value is invalid. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex"  [(ngModel)] ="metricscontrolData.partially_ready_percentRange1"  #partiallyReadyRange1 = "ngModel" [class.is-invalid]="partiallyReadyRange1.invalid && partiallyReadyRange1.touched" pattern="^[0-9]*$" maxlength="2"  required />
+									<div class="invalid_error" *ngIf = "partiallyReadyRange1.errors?.required && partiallyReadyRange1.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "partiallyReadyRange1.errors?.pattern && partiallyReadyRange1.touched " >Value is invalid. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.partially_ready_percentRange2"  #partiallyReadyRange2 = "ngModel" [class.is-invalid]="partiallyReadyRange2.invalid && partiallyReadyRange2.touched" pattern="^[0-9]*$"  maxlength="2" required />
+									<div class="invalid_error" *ngIf = "partiallyReadyRange2.errors?.required && partiallyReadyRange2.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "partiallyReadyRange2.errors?.pattern && partiallyReadyRange2.touched" >Value is invalid. </div>
+                                </td>
+                            </tr>
+										
+							<tr>
+                                <td class="tb-left">
+                                    <label for="label-3" class="control-label">Audit ready</label>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Number'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex" [(ngModel)] ="metricscontrolData.audit_ready_percentNumber"  #auditReadyNum = "ngModel" [class.is-invalid]="(auditReadyNum.invalid &&  auditReadyNum.touched) || metricscontrolData.audit_ready_percentNumber > 100"  maxlength="3" pattern="^[0-9]*$"  required />
+									<div class="invalid_error" *ngIf = "auditReadyNum.errors?.required &&  auditReadyNum.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "auditReadyNum.errors?.pattern &&  auditReadyNum.touched" >Value is invalid. </div>
+									<div class="invalid_error" *ngIf = "metricscontrolData.audit_ready_percentNumber > 100"> Value should be less then or equal 100. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex"  [(ngModel)] ="metricscontrolData.audit_ready_percentRange1"  #auditReadyRange1 = "ngModel" [class.is-invalid]="auditReadyRange1.invalid && auditReadyRange1.touched"  pattern="^[0-9]*$" maxlength="2"  required />
+									<div class="invalid_error" *ngIf = "auditReadyRange1.errors?.required &&  auditReadyRange1.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "auditReadyRange1.errors?.pattern &&  auditReadyRange1.touched" >Value is invalid. </div>
+								</td>
+								
+                                <td *ngIf="metricscontrolData.metrics_type == 'Range'">
+									<input class="form-control pad-left" type="text"  name = "Control_controlIndex"  [(ngModel)] ="metricscontrolData.audit_ready_percentRange2"  #auditReadyRange2 = "ngModel" [class.is-invalid]="(auditReadyRange2.invalid && auditReadyRange2.touched) || metricscontrolData.audit_ready_percentRange2 > 100"  pattern="^[0-9]*$" maxlength="3" required />
+									<div class="invalid_error" *ngIf = "auditReadyRange2.errors?.required &&  auditReadyRange2.touched">Value is required. </div>
+									<div class="invalid_error" *ngIf = "auditReadyRange2.errors?.pattern &&  auditReadyRange2.touched" >Value is invalid. </div>
+									<div class="invalid_error" *ngIf = "metricscontrolData.audit_ready_percentRange2 > 100"> Value should be less then or equal 100. </div>
+                                </td>
+                            </tr>
+                        </tbody>    
+                    </table>
+                </div>
+            </div>
+		</div>
+		
+        <div class="modal-footer modal-1">  
+            <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" (click)="ResetMetrics()" name="btnClear" >Reset</button>
+            <button  class="btn custom-blue-btn" (click)="SaveMetricsDefinition();" name="btnSave"  >Save metrics</button>
+		</div>    
+    </div> 
+</div>
+</div>
+

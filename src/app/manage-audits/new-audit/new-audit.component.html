@@ -1,0 +1,374 @@
+<div class="tab-content"> 
+    <div class="form-control error-message" *ngIf = "!isView">
+        <span style="color: #000;">Please fill in the following mandatory fields for Saving the audit</span>
+        <ul class="mandatory" style="padding-left: 35px;">
+            <li>Audit name</li>
+            <li>Audit dates</li>
+            <li>Actual audit dates & status</li>
+            <li>At least one customer, with minimum of one project chosen</li>
+            <li>At least one location where audit would be conducted</li>
+            <li>Programme name</li>
+        </ul>
+    </div>
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink = "/Accountlandscape">Home</a></li>
+            <li class="breadcrumb-item "><a routerLink="/Manageaudits">Manage Audits</a></li>
+            <li class="breadcrumb-item active">New Audit</li>
+        </ol>
+    </nav>
+    
+    <h2 class="main-head-title"> New audit </h2>
+    
+    
+    <form #newauditform = "ngForm">
+        <div class="search-content-row row" style="margin-left: 35px;">
+            <div class="col-sm-3 pad-left">
+                <div class="form-group">
+                    <label for="label-1" class="control-label">Parent Customer</label>
+                    <input type=text class="form-control" [(ngModel)] = "auditDetail.parent_customer_name" name="ParentCustomerName" readonly  >
+                </div>    
+            </div>
+        </div>
+
+        <div class="search-content-row row" style="margin-left: 35px;">
+            <div class="col-sm-3 pad-left">
+                <div class="form-group">
+                    <label for="label-2" class="control-label">Audit name<span class="mandatory">*</span></label>
+                    <input type=text [ngClass]="{'disabled-btn':isView}"  class="form-control"  
+                    name="ParentCustomer" #audit_name="ngModel"
+                    [(ngModel)] = "auditDetail.audit_name" maxlength=100 required>
+                    <div *ngIf="audit_name.invalid && (audit_name.dirty || audit_name.touched)">
+                        <div class="invalid_error" *ngIf = "audit_name.errors?.required">Audit name is required. </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <div class="row" style="margin-left: 35px;">
+            <div>
+                <legend class="control-label pad-left cmd-line">Maximum length 100 characters including space and punctuations </legend>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="search-content-row row" style="margin-left: 35px;">
+            <div class="col-sm-6 pad-left">
+                <div class="form-group">
+                    <legend  class="control-label-1">Pre-audit</legend>
+                    <hr class="hr-line">
+                </div>    
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <legend  class="control-label-1">Actual audit</legend>
+                    <hr class="hr-line">
+                </div>    
+            </div>
+        </div>
+
+        <div class="row" style="margin-left: 35px;">
+            <div class="col-sm-2 pad-left">
+                <div class="form-group">
+                    <label for="label-3" class="control-label">Start date<span class="mandatory">*</span></label>
+                    <input type=text [ngClass]="{'disabled-btn':isView}" class="form-control date-class" [(ngModel)] = "auditDetail.pre_audit_start_date"
+                    name="PreAuditStartDate" placeholder="01-Jan-2019"  bsDatepicker (bsValueChange)="onValueChange1($event)" [minDate]="currentDate" #pre_audit_start_date="ngModel"
+                    [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', showWeekNumbers: false }" required>
+                    <div *ngIf="pre_audit_start_date.errors && (pre_audit_start_date.dirty || pre_audit_start_date.touched)">
+                        <div class="invalid_error" *ngIf = "pre_audit_start_date.errors?.required">Select Pre-audit start date.</div>
+                    </div>
+                </div>    
+            </div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="label-4" class="control-label">End date<span class="mandatory">*</span></label>
+                    <input type=text [ngClass]="{'disabled-btn':isView}" class="form-control date-class" [(ngModel)] = "auditDetail.pre_audit_end_date" #pre_audit_end_date="ngModel"
+                    name="PreAuditEndDate" placeholder="01-Jan-2019"
+                    [minDate]="mindate1" (bsValueChange)="onValueChange2($event)"  bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', showWeekNumbers: false }" required>
+                    <div *ngIf="pre_audit_end_date.errors && (pre_audit_end_date.dirty || pre_audit_end_date.touched)">
+                        <div class="invalid_error" *ngIf = "pre_audit_end_date.errors?.required || pre_audit_start_date>pre_audit_end_date">Pre-audit End date should be greater than or equal to start date. </div>
+                    </div>
+                </div>    
+            </div>
+
+            <div class="col-sm-2"></div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="label-5" class="control-label">Start date<span class="mandatory">*</span></label><!--(bsValueChange)="onValueChange($event)"-->
+                    <input type=text [ngClass]="{'disabled-btn':isView}" class="form-control date-class"  [(ngModel)] = "auditDetail.actual_audit_start_date" name="ActualStartDate" 
+                    placeholder="01-Jan-2019"  bsDatepicker (bsValueChange)="onValueChange($event)"  [minDate]="maxdate"  #actual_audit_start_date="ngModel" 
+                    [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', showWeekNumbers: false }"  required>
+                    <div *ngIf="actual_audit_start_date.errors && (actual_audit_start_date.dirty || actual_audit_start_date.touched)">
+                        <div class="invalid_error" *ngIf = "actual_audit_start_date.errors?.required">Actual-audit start date should be greater than or equal to Pre-audit end date.</div>
+                    </div>
+        
+                    <label for = "label-6" class="control-label" style="margin-top: 20px;">Status<span class="mandatory">*</span></label>
+                    <select [ngClass]="{'disabled-btn':isView}" class="selectpicker show-tick form-control" 
+                    [(ngModel)] ="auditDetail.audit_status"   name="StatusID" #audit_status="ngModel"  required>
+                        <option  [ngValue] = "null" >Select</option>
+                        <option *ngFor = "let pcl of status" [ngValue] = "pcl.Value" >{{pcl.Value}} </option>
+                    </select>
+                    <div *ngIf="audit_status.errors && (audit_status.dirty || audit_status.touched)">
+                        <div class="invalid_error" *ngIf = "audit_status.errors?.required">Audit Status is requried. </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="label-7" class="control-label">End date<span class="mandatory">*</span></label>
+                    <!--[minDate]="mindate"-->
+                    <input type=text [ngClass]="{'disabled-btn':isView}" class="form-control date-class" [(ngModel)] = "auditDetail.actual_audit_end_date" #actual_audit_end_date="ngModel"
+                    name="ActualEndDate" placeholder="01-Jan-2019" 
+                    [minDate]="mindate" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY', showWeekNumbers: false }" required>
+                    <div *ngIf="actual_audit_end_date.errors && (actual_audit_end_date.dirty || actual_audit_end_date.touched)">
+                        <div class="invalid_error" *ngIf = "actual_audit_end_date.errors?.required">Actual-audit End date should be greater than or equal to start date. </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <hr class="hr-line-1">
+        <div class="row">
+            <div class="col-sm-9 column-height">
+                <label for="label-8" class="control-label-1 label-height">Customers<span class="mandatory">*</span></label>
+            </div>
+
+            <div class="col-sm-3 column-height">
+                <label for="label-9" class="control-label-1 label-height-1">
+                    <a [ngClass]="{'disabled-btn':isView}" class="custom-cancel-btn" (click)="SelectCustomers();">+ Select customers</a>
+                </label>
+            </div>
+            
+        </div>
+
+        <div class="gridstyle">
+            <ag-grid-angular    name = "agSelectedCustomers"
+                                style="width: 100%; height: 250px;" 
+                                class="ag-theme-balham"
+                                [rowData]="auditDetail.CustomerDetails" 
+                                [columnDefs]="selectedCustomerColumn"
+                                [defaultColDef]="defaultselectedCustomerColDef"
+                                [overlayLoadingTemplate]="loadingTemplateCustomer"
+                                [overlayNoRowsTemplate]="noRowsTemplateCustomer"
+                                [frameworkComponents]="frameworkComponents">
+            </ag-grid-angular>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-sm-9 column-height">
+                <label for="label-8" class="control-label-1 label-height">Locations<span class="mandatory">*</span></label>
+            </div>
+
+            <div class="col-sm-3 column-height">
+                <label for="label-9" class="control-label-1 label-height-1">
+                    <a [ngClass]="{'disabled-btn':isView}" class="custom-cancel-btn" (click)="SelectLocations();">+ Select locations</a>
+                </label>
+            </div>
+        </div>
+
+        <div  class="gridstyle">
+            <ag-grid-angular    name = "agSelectedLocations"
+                                style="width: 100%; height: 250px;" 
+                                class="ag-theme-balham"
+                                [rowData]="auditDetail.LocationDetails" 
+                                [columnDefs]="selectedLocationColumn"
+                                [defaultColDef]="defaultselectedLocationColDef"
+                                [gridOptions]="selectedLocgridOptions"
+                                [overlayLoadingTemplate]="loadingTemplateLocation"
+                                [overlayNoRowsTemplate]="noRowsTemplateLocation">
+            </ag-grid-angular>
+        </div>
+
+        <div class="search-content-row row label-height-2" >
+            <div class="col-sm-3 pad-left">
+                <div class="form-group">
+                    <label for="label-2" class="control-label">Programme<span class="mandatory">*</span></label>
+                    <input type=text [ngClass]="{'disabled-btn':isView}" class="form-control" #programme="ngModel"
+                    [(ngModel)] = "auditDetail.programme" name="Programme" required placeholder="Enter Programme" required>
+                    <div *ngIf="programme.errors && (programme.dirty || programme.touched)">
+                        <div class="invalid_error" *ngIf = "programme.errors?.required">Programme is required. </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <br>
+        <div class="custom-btn text-left">
+            <button class="btn  custom-cancel-btn" style="margin-left: 0px;" (click)="CancelNewAudit()" name="btnClear">Cancel</button>
+
+
+
+            <button class="btn custom-blue-btn" (click)="SaveAudits($event);" name="btnSave" *ngIf="actionParam !='view'"
+                    [disabled]="audit_name.invalid || pre_audit_start_date.invalid || pre_audit_end_date.invalid || actual_audit_start_date.invalid || actual_audit_end_date.invalid || programme.invalid
+                     || audit_status.invalid || (auditDetail.CustomerDetails != null && auditDetail.CustomerDetails.length==0 )
+                     || (auditDetail.LocationDetails != null && auditDetail.LocationDetails.length==0) || NoOfProjectsCountCheck()">
+                Save
+            </button>
+            <button class="btn custom-blue-btn" *ngIf="actionParam !='view'"
+            [disabled]="audit_name.invalid || pre_audit_start_date.invalid || pre_audit_end_date.invalid || actual_audit_start_date.invalid || actual_audit_end_date.invalid ||programme.invalid 
+            || audit_status.invalid || (auditDetail.CustomerDetails != null && auditDetail.CustomerDetails.length==0  ) 
+            || (auditDetail.LocationDetails != null && auditDetail.LocationDetails.length==0) || NoOfProjectsCountCheck() "
+             (click)="SaveAudits($event);" name="btnSaveAndProceed">
+                Save & proceed
+            </button>
+            <button class="btn  custom-cancel-btn" *ngIf="actionParam =='view'" style="margin-left: 0px;" (click)="NextNewAudit()" name="btnClear">Next</button>
+
+        </div>
+    </form>
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+        <p style="color: grey">Please Wait. </p>  
+    </ngx-spinner>
+    <div class="modal fade" id="SelectCustomerpopup" role="dialog" data-backdrop="static"  data-keyboard="false"> 
+        <div class="modal-dialog">  
+            <div class="modal-content" style="width: 1000px; right: 170px;"> 
+                <div  class="modal-header">  
+                    <h4 class="modal-title tab-left">Select customers</h4>  
+                    <button type="button" class="close pull-right" (click)=closeSelectCustomer(); aria-label="Close">  
+                        <span aria-hidden="true">×</span>  
+                    </button>  
+                </div> 
+
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div class="row"> 
+                            <div class="col-sm-3 pad-left">                                                          
+                                <div class="form-group">         
+                                    <label for="label-1" class="control-label">Parent customer:</label>              
+                                </div>
+                            </div>
+
+                            <div class="col-sm-9 pad-left">
+                                <label for="label-1" class="control-label" style="word-break: break-all;" >{{auditDetail.parent_customer_name}} </label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <ag-grid-angular *ngIf="customerRow != null" #agGrid    name = "agCustomerlist"
+                                                        style="width: 500px; height: 350px;" 
+                                                        class="ag-theme-balham"
+                                                        [columnDefs]="customerColumn"
+                                                        [defaultColDef]="defaultCustomerColDef"
+                                                        [suppressRowClickSelection]="true"
+                                                        [rowSelection]="cusrowSelection"
+                                                        [rowData]="customerRow"
+                                                        [gridOptions]="cusgridOptions"
+                                                      
+                                                        >
+                            </ag-grid-angular>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn custom-cancel-btn" (click)=" ClearSelectedCustomers();">Reset</button>
+                    <button class="btn custom-blue-btn" (click)="SaveSelectedCustomers();">Save customers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="SelectLocationpopup" role="dialog" data-backdrop="static"  data-keyboard="false"> 
+        <div class="modal-dialog">  
+            <div class="modal-content" style="width: 750px; right: 170px;"> 
+                <div  class="modal-header">  
+                    <h4 class="modal-title tab-left">Select locations</h4>  
+                    <button type="button" class="close pull-right" (click)=closeSelectLocation(); aria-label="Close">  
+                        <span aria-hidden="true">×</span>  
+                    </button>  
+                </div> 
+                
+                <div class="modal-body">
+                    <div class="tab-content">
+
+                        <div class="row"> 
+                            <div class="col-sm-3 pad-left">                                                          
+                                <div class="form-group">         
+                                    <label for="label-1" class="control-label">Parent customer:</label>              
+                                </div>
+                            </div>
+
+                            <div class="col-sm-9 pad-left">
+                                <label for="label-1" class="control-label" style="word-break: break-all;" >{{auditDetail.parent_customer_name}} </label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <ag-grid-angular #agGrid *ngIf="locationRow != null"   name = "agLocationlist"
+                                                        style="width: 500px; height: 350px;" 
+                                                        class="ag-theme-balham"
+                                                        [rowData]="locationRow" 
+                                                        [columnDefs]="locationColumn"
+                                                        [defaultColDef]="defaultLocationColDef"
+                                                        [suppressRowClickSelection]="true"
+                                                        [rowSelection]="locrowSelection"
+                                                        [gridOptions]="locgridOptions"
+                            >
+                                                        <!-- (gridReady)="onGridReadyLocation($event)" > -->
+                            </ag-grid-angular>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn custom-cancel-btn" (click)=" ClearSelectedLocations();">Reset</button>
+                    <button class="btn custom-blue-btn" (click)="SaveSelectedLocations();">Save locations</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="AddProjectspopup" role="dialog" data-backdrop="static"  data-keyboard="false">
+        <div class="modal-dialog">  
+            <div class="modal-content" style="width: 580px; ">
+                <div  class="modal-header">  
+                    <h4 class="modal-title tab-left">Add projects</h4>  
+                    <button type="button" class="close pull-right" (click)=CloseProjectPopup(); aria-label="Close">  
+                        <span aria-hidden="true">×</span>  
+                    </button>  
+                </div> 
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div class="row">
+                            <div class="col-sm-3 pad-left">                                                          
+                                <div class="form-group">         
+                                    <label for="label-1" class="control-label-1">Parent customer</label> 
+                                    <label for="label-2" class="control-label">{{customerProject.p_parent_customer_name}}</label>             
+                                </div>
+                            </div>
+                            <div class="col-sm-3 pad-left custom-right">                                                          
+                                <div class="form-group">         
+                                    <label for="label-3" class="control-label-1">Customer</label> 
+                                    <label for="label-4" class="control-label">{{customerProject.p_customer_name}}</label>             
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <ag-grid-angular #agGrid  *ngIf = "projectRow != null"  name = "agProjectslist"
+                                                        style="width: 500px; height: 350px;" 
+                                                        class="ag-theme-balham"
+                                                        [rowData]="projectRow" 
+                                                        [columnDefs]="projectColumn"
+                                                        [defaultColDef]="defaultProjectColDef"
+                                                        [suppressRowClickSelection]="true"
+                                                        [rowSelection]="projectrowSelection"
+                                                        [gridOptions]="projectgridOptions"
+                                                        >
+                            </ag-grid-angular>
+                        </div>
+                    </div> 
+                    <br>
+                </div>
+                <div class="modal-footer pad-left-1">
+                    <button class="btn custom-cancel-btn" (click)=" ClearSelectedProjects();">Cancel</button>
+                    <button class="btn custom-blue-btn" (click)="SaveSelectedProjects();">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

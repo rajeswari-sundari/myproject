@@ -1,0 +1,182 @@
+<div class="tab-content">    
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" *ngIf="isRpocApocMdu==true"><a routerLink = "/Accountlandscape">Home</a></li>
+            <li class="breadcrumb-item "><a routerLink="/Mytasks">My tasks</a></li>
+            <li class="breadcrumb-item"><a (click)="BacktoChecklist()">Pre-audit checklist tasks</a></li>
+            <li class="breadcrumb-item active">Update task</li>
+        </ol>
+    </nav>
+
+    <h2 class="sub-3-head-title"> Pre-audit checklist tasks </h2>
+
+    <div class="new-audit-data" *ngIf= "preChecklisttask!=null">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Audit ID</label>
+                <label for="label-1" class="control-label-2"> {{preChecklisttask[0].audit_id}} </label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Audit name</label>
+                <label for="label-1" class="control-label-2">{{preChecklisttask[0].audit_name}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Parent customer</label>
+                <label for="label-1" class="control-label-2">{{preChecklisttask[0].parent_customer_name}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Actual audit date </label>
+                <label for="label-1" class="control-label-2">{{preChecklisttask[0].actual_audit_date}}</label>
+            </div>
+            <div class="col-sm-4" *ngIf="isPOC==true">
+                <label for="label-1" class="control-label-1">Assigned to(RPOC)</label>
+                <label for="label-1" class="control-label-2 break-word" style="color: #0033A0; text-decoration: underline;">{{preChecklisttask[0].point_of_contact}}</label>
+            </div>
+            <div class="col-sm-4" *ngIf="isPOC==false">
+                <label for="label-1" class="control-label-1">Assigned to(MDU)</label>
+                <label for="label-1" class="control-label-2 break-word" style="color: #0033A0; text-decoration: underline;">{{MDUlist}}</label>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+    <br>
+    <div class="new-audit-data" *ngIf= "preChecklisttask!=null">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Audit category</label>
+                <label for="label-1" class="control-label-2">{{preChecklisttask[0].audit_category_name}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Audit checklist</label>
+                <label for="label-1" class="control-label-2">{{preChecklisttask[0].audit_checklist}}</label>
+            </div>
+            <div class="col-sm-6">
+                <label for="label-1" class="control-label-1">Task Status</label>
+                <label for="label-1" class="control-label-2">{{preChecklisttask[0].task_status}}</label>
+            </div>
+        </div>
+        <!-- <br>
+        <br>
+        <div class="row">
+            <div class="col-sm-9">
+                <label for="label-1" class="control-label-1">Comments</label>
+                <label for="label-1" class="control-label-2" style="overflow-wrap: break-word;">
+                    {{preChecklisttask[0].comments}}
+                </label>
+            </div>
+        </div> -->
+    </div>
+
+    <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+    <br>
+    <br>
+    <div class="new-audit-data" *ngIf= "preChecklisttask!=null">
+        <div class="row">
+            <div class="col-sm-4" *ngIf="isPOC==true || isMDU==true">
+                <div class="form-group auto-calculate">
+                    <label for = "label-2" class="control-label-1">Target achieved(Yes/No)<span class="mandatory">*</span></label>
+                    <!-- <input type="text" class="form-control" name="Target" [(ngModel)]="loadpreauditChecklist.target_achieved"> -->
+                    <input type="radio"  [(ngModel)]="loadpreauditChecklist.target_achieved" name="target_achieved" value="Yes" 
+                    (change)="targetclick();" #target_achieved="ngModel" required>
+                    <span>Yes</span>    
+                    <input type="radio"  [(ngModel)]="loadpreauditChecklist.target_achieved" name="target_achieved" value="No" 
+                    (change)="targetclick();" #target_achieved="ngModel" required>
+                    <span>No</span>
+                    <div class="form-control-feedback">
+                        <div class="invalid_error" *ngIf = "target_achieved.errors?.required">Target is Required. </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" *ngIf="isMDU==false && isPOC == false">
+                <div class="form-group auto-calculate">
+                    <label for = "label-2" class="control-label-1">Target achieved(Yes/No)</label>
+                    <label for="label-1" class="control-label-2">{{preChecklisttask[0].target_achieved}}</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="label-1" class="control-label-1">Comments<span class="mandatory">*</span></label>
+                    <textarea type="text" class="form-control" [(ngModel)]="loadpreauditChecklist.comments" name="comments" ></textarea>
+                </div>
+            </div>
+        </div> -->
+        
+        <div class="row custom-top">
+            <div class="col-sm-8 pad-left-3">
+                <div class="custom-btn text-left">
+                    <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="CanceltoChecklist()">Cancel</button>
+                    <button  class="btn custom-blue-btn" name="btnSave" (click)="SaveUpdateChecklist()" *ngIf="isPOC==true" [ngClass]="{'disabled-btn':isDisabled}">Save</button>
+                    <button  class="btn custom-blue-btn" name="btnSubmit" (click)="SubmitUpdateChecklist()" *ngIf="isPOC==true" [ngClass]="{'disabled-btn':isDisabled}">Save & Submit</button>
+                    <!-- <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear">Reject</button>
+                    <button  class="btn custom-blue-btn" name="btnSubmit">Approve</button> -->
+                    <button  class="btn custom-cancel-btn" name="btnReject" *ngIf="isPOC==false" (click)="ShowReject()">Reject</button>
+                    <button  class="btn custom-blue-btn" name="btnApprove" *ngIf="isPOC==false" (click)="ShowSubmit()">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner> 
+<div class="modal fade" id="Submitpopup" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 700px; right: 50px;">                                                           
+            <div  class="modal-header" style="padding-bottom: 0px; padding-top: 0px;">  
+                <button type="button" class="close pull-right"  (click)="CloseSubmitPopup();" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+                
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content" style="padding-top: 0px;">
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;">Approve pre-audit checklist tasks</h4>
+                    <label for="label-1" class="control-label-2">Are you sure you want to approve the task(s) submitted by RPOC?</label>
+                    <label for="label-1" class="control-label-4">Comments[Optional]</label>
+                    <textarea type="text" class="form-control" [(ngModel)]="loadpreauditChecklist.comments" name="comments" ></textarea>
+                </div>
+            </div>
+            <hr style="border: 1px solid #BDBDBD; margin: 10px 20px 20px;">
+            <div class="modal-footer" style="margin-left: 10px;">
+                <button class="btn custom-cancel-btn" (click)="CloseSubmitPopup();">No</button>
+                <button class="btn custom-blue-btn" name="btnApprove" (click)="ApproveSubmitPopup($event);">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Rejectpopup" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 700px; right: 50px;">                                                           
+            <div  class="modal-header" style="padding-bottom: 0px; padding-top: 0px;">  
+                <button type="button" class="close pull-right"  (click)="CloseRejectPopup();" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+                
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content" style="padding-top: 0px;">
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;">Reject pre-audit checklist tasks</h4>
+                    <label for="label-1" class="control-label-2">Are you sure you want to reject the task(s) submitted by RPOC?</label>
+                    <label for="label-1" class="control-label-4">Comments<span class="mandatory">*</span></label>
+                    <textarea (input)="commentsclick(savepreauditbyRPOC.p_comments)"  type="text" class="form-control" [(ngModel)]="savepreauditbyRPOC.p_comments" name="comments" #reject_comments="ngModel" required  ></textarea>
+                    <div class="form-control-feedback" *ngIf="reject_comments.errors && (reject_comments.dirty || reject_comments.touched)">
+                        <div class="invalid_error" *ngIf = "reject_comments.errors?.required">Comments is Required. </div>                        
+                    </div>
+
+                </div>
+            </div>
+            <hr style="border: 1px solid #BDBDBD; margin: 10px 20px 20px;">
+            <div class="modal-footer" style="margin-left: 10px;">
+                <button class="btn custom-cancel-btn" (click)="CloseRejectPopup();">No</button>
+                <button class="btn custom-blue-btn" name="btnReject" (click)="ApproveSubmitPopup($event);" [disabled] = "(reject_comments.invalid || savepreauditbyRPOC.p_comments == '')" >Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

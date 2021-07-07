@@ -1,0 +1,51 @@
+<!-- <div class="header" >
+  <div class="row">
+    <div class="col-sm-8">
+      <div>
+        <div id="mySidepanel"   class="sidepanel">
+          <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a>
+          <h2 class="main-nav-title"> Main menu</h2>
+          <hr style="margin: 20px; color: #C5C5C5;">
+          <a routerLink="/Managecontrols"(click)="closeNav()" ><img class="menu_icon" src="/Bundles/assets/control.svg" alt="">Manage controls</a>
+          <a routerLink="/Manageaudits" (click)="closeNav()" ><img src="/Bundles/assets/audit.svg" alt="" class="menu_icon">Manage audit</a>
+          <a routerLink="/Mytasks" (click)="closeNav()"><img src="/Bundles/assets/regulation.svg" alt="" class="menu_icon">My tasks</a>
+          <a routerLink="/Accountlandscape" (click)="closeNav()"> <img src="/Bundles/assets/landscape.svg" alt="" class="menu_icon">Account landscape</a>
+          <a routerLink="/Managecontrols" (click)="closeNav()"><img src="/Bundles/assets/todo.svg" alt="" class="menu_icon">Manage knowledge base</a>
+        </div>
+      </div>
+      
+      <button class="openbtn" (click)="openNav()" *ngIf ='Login == true' >☰</button>
+        <span class="header-title"> Audit Readiness Tool</span>
+    </div>
+    <div class="col-sm-4 text-right">
+      <div class="header-right">
+        <a class="header-help" href="javascript:void(0)"></a>
+        <a class="header-notify" href="javascript:void(0)"></a>
+      </div>
+    </div>
+  </div>
+  
+</div> -->
+<!-- <app-login></app-login> -->
+<!-- <div class="tab-content" *ngIf='LoginPage==true'>
+  <div style="margin: 160px auto;">
+    <div class="row">
+      <h1 class="main-head-title-1">ART Login</h1>
+    </div>
+    
+    <div class="row" style="margin-left: 30px; margin-bottom: 30px; justify-content: center;">
+      <div class="col-sm-3">
+        <label for="label-1" class="control-label">Associate ID</label>
+        <input type=text id="userID" class="form-control" name="loginid" placeholder="Enter your associate id"  >
+      </div>
+    </div>
+    <div class="row" style="margin: 0px 18px; justify-content: center;">
+      <button  class="btn custom-blue-btn" (click)="OnLogin()">Login</button>
+    </div>
+  </div>
+</div> -->
+<app-header></app-header>
+<div>
+  <router-outlet></router-outlet>
+</div>
+

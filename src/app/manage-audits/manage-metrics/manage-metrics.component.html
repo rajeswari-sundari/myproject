@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-sm-3 pad-left-3"> 
+        <div class="form-group">
+            <label for="label-1" class="control-label"> Parent Category</label>
+            <select  class="selectpicker show-tick form-control" name="ParentCategoryID" (change)='LoadManagemetricCategory()' [(ngModel)]="auditcontrol.p_parent_category_id">
+                <option  [ngValue] = "null" >Select ParentCategory </option>
+                <option *ngFor="let pcl of parentCategories" [ngValue]="pcl.parent_category_id">{{pcl.parent_category_name}} </option>               
+            </select>
+        </div>
+    </div>      
+    <div class="col-sm-3"> 
+        <div class="form-group">
+            <label for="label-1" class="control-label"> Category</label>
+            <select  class="selectpicker show-tick form-control" name="CategoryID" 
+            [(ngModel)]="auditcontrol.p_category_id">
+            <option  [ngValue] = "null" >Select Category </option>
+            <option  *ngFor="let pcl of Categories" [ngValue]="pcl.category_id">{{pcl.category_name}}</option>
+               
+            </select>               
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            <label for="label-1" class="control-label"> Control</label>
+            <input type=text class="form-control"  [(ngModel)]="auditcontrol.p_control_name"
+            name="Control" placeholder="E.g. Project Plan available" maxlength="200">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="custom-btn text-left">
+        <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="ResetManagemetricControls()">Clear Search</button>
+        <button  class="btn custom-blue-btn" name="btnSearch" (click)="SearchManagemetricControls()">Search Controls</button>
+    </div>
+</div>
+<div class="row">
+    <ag-grid-angular id="agGridMetrics" name="agGridMetrics" style="width: 98%; height: 400px;"
+    class="ag-theme-balham" [gridOptions]="gridOptions" [rowData]="rowData"
+    [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+    (onCellEditingStopped)="onCellEditingStopped($event)"
+    (onCellEditingStarted)="onCellEditingStarted($event)" [components]="components" [overlayLoadingTemplate]="loadingTemplate"
+    [overlayNoRowsTemplate]="noRowsTemplate">
+</ag-grid-angular>
+</div>
+<div class="row" style="margin-top: 20px;">
+    <div class="col-sm-8">
+        <div class="custom-btn text-left">
+            <button *ngIf="isAdmin==false"  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="CancelAudit()" >Cancel</button>
+            <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="GotoPrevious()">Back</button>
+            <button *ngIf="isAdmin==true" class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="Next()">Next</button>
+            <button  *ngIf="isAdmin==false" class="btn custom-blue-btn" name="btnSearch" (click)="SavemanageMetrics()">Save</button>
+            <button  *ngIf="isAdmin==false" class="btn custom-blue-btn" name="btnSearch" (click)="SaveProceed();">Save &amp; proceed</button>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

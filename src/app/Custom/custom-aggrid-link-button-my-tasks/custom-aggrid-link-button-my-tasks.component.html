@@ -1,0 +1,26 @@
+<span class="arrow-icon" *ngIf="(editauditlinkId == 'myTask_audit_id' || editauditlinkId =='myTask_preAuditCheckList_id' || editauditlinkId =='myTask_ongoingAudit_id' )" >
+    <img src="/Bundles/assets/Double_Arrow.svg" (click)="onClick()">
+    <div>Edit</div>
+</span>
+<span *ngIf="editauditlinkId == 'progress_status'">
+    <button  class="btn  custom-cancel-btn" (click)="onClick1($event)" name="btnClear" >{{this.progress_status}}</button>
+</span>
+
+<!-- for MDU role and completed task NO SEND REMINDER -->
+<span *ngIf="editauditlinkId == 'ongoing_audit_action'  && pending_with_action != 'MDU RCM'">
+    <button  class="btn custom-cancel-btn" (click)="onClick1($event)" name="btnClear" >Send Reminder</button>
+</span>
+<!-- update for all cases except completed -->
+<span *ngIf="editauditlinkId == 'ongoing_audit_action'">
+    <button  class="btn custom-cancel-btn" (click)="onClick()" name="btnClear" >Update</button>
+</span>
+<div *ngIf="editauditlinkId == 'ongoing_preaudit_action'" >
+    <span  *ngIf="pending_with_action != 'MDU RCM'">
+        <button  class="btn custom-cancel-btn" (click)="onClick1($event)" name="btnClear" >Send Reminder</button>
+    </span>
+    <!-- update for all cases except completed -->
+    <span>
+        <button  class="btn custom-cancel-btn" (click)="onClick()" name="btnClear" >Update</button>
+    </span>
+
+</div>

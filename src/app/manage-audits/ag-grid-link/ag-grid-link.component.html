@@ -1,0 +1,3 @@
+    <!-- <span ><button src="/Bundles/assets/graph.png" (click)="onClick($event)">Add Projects</span> -->
+        <span *ngIf="numberofprojects == 0"><button [ngClass]="{'disabled-btn':isView}" class="btn custom-cancel-btn" (click)="onClick($event)">Add Projects</button></span>
+        <span  *ngIf="numberofprojects  > 0" ><button [ngClass]="{'disabled-btn':isView}" class="btn custom-cancel-btn" (click)="onClick($event)">Edit Projects</button></span>

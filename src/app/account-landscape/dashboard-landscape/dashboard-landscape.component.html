@@ -1,0 +1,413 @@
+<div class="row">
+    <div class="col-sm-4">
+        <h4 class="sub-head-title">Account risk dashboard</h4>
+    </div>
+                                    
+    <div class="col-sm-8">
+        <div class="custom-btn" style="float: right;">
+            <button class="btn custom-cancel-btn" (click)="Overviewpopup();" *ngIf="accountOverviewEnabled">Account overview</button> 
+            <button class="btn  custom-blue-btn" (click)="Publishpopup();" *ngIf="isSBURPOC==false">Publish dashboard</button> 
+            <label class="dot-navigation" style="margin: 5px;" *ngIf="isSBURPOC==false">
+                <input type="checkbox">
+                <div class="tooltiptext-1">
+                    <a class="closebtn">×</a>
+                    <br>
+                    <p class="control-label"><a routerLink="/Manageaudits">Manage audit</a></p>
+                    <p class="control-label"><a routerLink="/AddEditAudit">Create new audit</a></p>
+                </div>
+            </label>	
+        </div>
+    </div>
+</div>
+
+<div class="search-control-table" style="border-bottom: 0px !important;">
+    <div class="search-content-row row"> 
+        <div class="col-sm-2" *ngIf="isSBURPOC==false"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label">Level of view</label>
+                <select id="BU" class="selectpicker show-tick form-control" [(ngModel)] = "dashboardSearchData.bu_name" name="BU" #drpBU = "ngModel" (change)=LoadAccounts(drpBU.value);>
+                    <option  [ngValue] = null >All BUs & SBUs</option>
+                    <option *ngFor = "let BU of BUList" [ngValue] = "BU.Value" >{{BU.Value}} </option> 
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-2"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label">Account</label>
+                <select  class="selectpicker show-tick form-control"  [(ngModel)] = "dashboardSearchData.account_id" name="AccountID" #account="ngModel" (change)=LoadProjects();>
+                    <option  [ngValue] = null >All accounts</option>
+                     <option *ngFor = "let accounts of AccountList" [ngValue] = "accounts.Key" >{{accounts.Value}} </option> 
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-2"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label">Project</label>
+                <select  class="selectpicker show-tick form-control"  [(ngModel)] = "dashboardSearchData.project_id" name="ProjectID">
+                    <option  [ngValue] = null >All projects</option>
+                    <option *ngFor = "let pcl of ProjectList" [ngValue] = "pcl.Key" >{{pcl.Value}} </option> 
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4"> 
+            <div class="form-group">
+                <label for="label-1" class="control-label" style="visibility: hidden;">All</label>
+                <button class="btn custom-blue-btn" (click)="doughnutchartdata(dashboardSearchData)" >Apply filter</button> 
+                <button class="btn  custom-cancel-btn" (click)="ClearFilter()">Clear filter</button> 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <p  style="color: red; font-weight: bold; font-family: 'TTNorms-Medium' !important;">
+            Note: External risks category will display at all times, no matter what has been chosen in filters above.
+        </p>
+    </div>
+</div>
+<hr style="border: 1px solid #BDBDBD; margin: 25px 0px 0px;">
+<div id= "capture">
+    <div class="row">
+        <div class="col-sm-4">
+            <h4 class="sub-head-title">Category risk summary</h4>
+        </div>
+    </div>
+
+    <div class="row risk-summary" style="padding: 15px;">
+        <canvas *ngIf="datasets" width="1000" height="400" baseChart 
+                chartType="bar" 
+                [datasets]="datasets"
+                [labels]="parentCategory" 
+                [legend]="false"  
+                [colors]="colours"
+                [options]="options"
+        >
+        </canvas> 
+    </div>
+
+
+<div class="row">
+    <div class="col-sm-4">
+        <h4 class="sub-head-title">Category risk breakdown</h4>
+    </div>
+</div>
+
+<div class="row" >
+    <div class="col-sm-3  risk-breakdown column-flex" *ngFor = "let category of categoryRisks; let categoryIndex=index;">
+        <p class="control-label-1">{{category.parent_category_name}}</p>
+        
+        <canvas baseChart id ="doughnutChart{{categoryIndex}}" #canvasID
+                chartType="doughnut" 
+                [data]="category.percentageValue" 
+                [labels]="category.category_short_name" 
+                [legend]="false"  
+                [colors]="category.Color"
+                [options]="chartOptions"
+                (chartClick) = "chartclick($event,categoryIndex)"
+        >
+        </canvas> 
+        
+        <!-- <label class="control-label" style="text-decoration: underline; color: #0033A0; cursor: pointer; float: right;">
+            View legend
+         
+            <div class="tooltiptext">
+                <p class="control-label" style="font-size: 12px; font-weight: bold;">Pricing</p>
+                <p class="control-label" style="font-size: 12px; font-weight: bold;">Utilization</p>
+                <p class="control-label" style="font-size: 12px; font-weight: bold;">Cmargin coverage</p>
+                <p class="control-label" style="font-size: 12px; font-weight: bold;">CMargin accuracy</p>
+                <p class="control-label" style="font-size: 12px; font-weight: bold;">Timely MIP execution</p>
+            </div>
+        </label> -->
+        <!-- <label class="control-label" style="text-decoration: underline; color: #0033A0; float: right; cursor: pointer;">
+            View legend -->
+            <!-- <input type="checkbox"> -->
+            <!-- <div class="tooltiptext">
+                <p class="control-label">Pricing</p>
+                <p class="control-label">Utilization</p>
+                <p class="control-label">Cmargin coverage</p>
+                <p class="control-label">CMargin accuracy</p>
+                <p class="control-label">Timely MIP execution</p>
+            </div>
+        </label> -->
+    </div>
+    
+    <!-- <div class="col-sm-3  risk-breakdown custom-right-1 column-flex">
+        <p class="control-label-1">Risk to revenues</p>
+        <label class="control-label" style="text-decoration: underline; color: #0033A0; cursor: pointer; float: right;">
+            View legend
+          
+            <div class="tooltiptext">
+                <p class="control-label">Pricing</p>
+                <p class="control-label">Utilization</p>
+                <p class="control-label">Cmargin coverage</p>
+                <p class="control-label">CMargin accuracy</p>
+                <p class="control-label">Timely MIP execution</p>
+            </div>
+        </label>
+    </div>
+    <div class="col-sm-3  risk-breakdown custom-right-1 column-flex">
+        <p class="control-label-1">Risk to margin</p>
+        <label class="control-label" style="text-decoration: underline; color: #0033A0; cursor: pointer; float: right;">
+            View legend
+         
+            <div class="tooltiptext">
+                <p class="control-label">Pricing</p>
+                <p class="control-label">Utilization</p>
+                <p class="control-label">Cmargin coverage</p>
+                <p class="control-label">CMargin accuracy</p>
+                <p class="control-label">Timely MIP execution</p>
+            </div>
+        </label>
+    </div> -->
+</div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>   
+
+<div class="modal fade" id="Publishpopup" role="dialog" data-backdrop="static" data-keyboard="false"> 
+	<div class="modal-dialog">							
+		<div class="modal-content" style="width: 700px; right: 80px;">															  
+		   	<div  class="modal-header">  
+		  		<h4 class="modal-title pull-left">Publish dashboard</h4>  
+		  		<button type="button" class="close pull-right" (click)="closePublish();" aria-label="Close">  
+					<span aria-hidden="true">×</span>  
+		  		</button>  
+            </div>
+            <form  #dashboardPulishedform = "ngForm">
+            <div  class="modal-body"> 
+                <div class="tab-content modal-1"> 		
+                    <div class="row"> 
+                        <div class="col-sm-6">															
+                            <div class="form-group">       
+                                <label for="label-1" class="control-label">Dashboard name<span class="mandatory">*</span></label>   
+                                <input type=text class="form-control" placeholder="Enter Dashboard name" [(ngModel)]="publishData.dashboard_name" maxlength="200" 
+                                #dashboardName = "ngModel" [class.is-invalid]="dashboardName.invalid && dashboardName.dirty" name="dashboardName" required id='dashboardName' >                  
+                                <div class="form-control-key" *ngIf="dashboardName.dirty || dashboardName.touched">
+                                    <div class="invalid_error" *ngIf = "dashboardName.errors?.required" >Dashboard name is required </div>
+                                </div>
+                                <!-- <label id="laberrcat" style="color: red;" class="control-label"></label>         -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"> 
+                        <div class="col-sm-6">															
+                            <div class="form-group">
+                                <label for="label-1" class="control-label">Choose BU/SBU<span class="mandatory">*</span></label>
+                                <select  class="selectpicker show-tick form-control"  [(ngModel)] = "publishData.bu_name" #pubBUName = "ngModel" name="drpPublishBu" [class.is-invalid]="pubBUName.invalid && pubBUName.dirty"  (change)=PublishLoadAccounts(pubBUName.value); required>
+                                 <option  [ngValue] = null >Select BU/SBU</option>
+                                 <option *ngFor = "let pubBU of publishPopBUList" [ngValue] = "pubBU.Value" >{{pubBU.Value}} </option> 
+                                </select>
+                                <div class="form-control-key" *ngIf="pubBUName.dirty || pubBUName.touched">
+                                    <div class="invalid_error" *ngIf = "pubBUName.errors?.required" >BU/SBU is required </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">															
+                            <div class="form-group">
+                                <label for="label-1" class="control-label">Choose Account</label>
+                                <select  class="selectpicker show-tick form-control" [(ngModel)] = "publishData.account_id"  #pubAccount = "ngModel"  name="drpPublishAccount" (change)=PublishLoadProjects(); [class.is-invalid]="pubAccount.invalid && pubAccount.dirty" required>
+                                    <option  [ngValue] = null >All Account</option>
+                                    <option *ngFor = "let pubAccounts of pulishAccountList" [ngValue] = "pubAccounts.Key" >{{pubAccounts.Value}} </option>
+                                </select>
+                                <!-- <div class="form-control-key" *ngIf="pubAccount.dirty || pubAccount.touched">
+                                    <div class="invalid_error" *ngIf = "pubAccount.errors?.required" >Account is required </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                
+
+                    <div class="row"> 
+                        <div class="col-sm-6">															
+                            <div class="form-group">
+                                <label for="label-1" class="control-label">Choose project</label>
+                                <select  class="selectpicker show-tick form-control" [(ngModel)] = "publishData.project_id" #pubProjects = "ngModel" name="drpPublishProject" [class.is-invalid]="pubProjects.invalid && pubProjects.dirty" required>
+                                    <option  [ngValue] = null >All Project</option>
+                                    <option *ngFor = "let pubProjects of publishProjectList" [ngValue] = "pubProjects.Key" >{{pubProjects.Value}} </option>
+                                </select>
+                                <!-- <div class="form-control-key" *ngIf="pubProjects.dirty || pubProjects.touched">
+                                    <div class="invalid_error" *ngIf = "pubProjects.errors?.required" >Project is required </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"> 
+                        <div class="col-sm-12">															
+                            <div class="form-group">       
+                                <label for="label-1" class="control-label">Input Associate IDs to publish to<span class="mandatory">*</span></label>   
+                                <input type=text class="form-control" placeholder="Enter Sent to" [(ngModel)] = "publishData.associateIds" [class.is-invalid]="assciateID.invalid && assciateID.dirty" name="drpAssociateID"  #assciateID ="ngModel" required pattern="^[0-9;]+$"  >                  
+                                <div class="invalid_error" *ngIf = "assciateID.touched || assciateID.dirty" >
+                                    <div  *ngIf = "assciateID.errors?.required" >Associate is required </div>
+                                    <div  *ngIf = "assciateID.errors?.pattern" >Please enter valid format </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="modal-footer modal-1"> 	
+                <button type="button" class="btn custom-cancel-btn" (click)="closePublish();">Cancel</button>  	
+                <button type="button" [disabled] = "!checkDashboardPublishData() || assciateID.invalid" class="btn custom-blue-btn" (click)="Publishdashboard();">Publish</button>  	
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Overviewpopup" style="overflow: auto !important;" role="dialog" data-backdrop="static" data-keyboard="false"> 
+	<div class="modal-dialog">							
+		<div class="modal-content" style="width: 900px; right: 160px;">															  
+		   	<div  class="modal-header">  
+		  		<h4 class="modal-title pull-left">Account overview</h4>  
+		  		<button type="button" class="close pull-right" (click)="closeOverview();" aria-label="Close">  
+					<span aria-hidden="true">×</span>  
+		  		</button>  
+            </div>
+
+            <div  class="modal-body"> 
+                <div class="tab-content modal-1"> 		
+                    <div class="row" *ngIf="accountOverviewList!=null"> 
+                        <div class="col-sm-12">
+                            <!-- <div style="display: grid;"> -->
+                                <table class="table table-bordered control-table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2" style="text-align: center;">Overview</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="auto-calculate">
+                                        <tr>
+                                            <td>Account Name</td>
+                                            <td>{{accountOverviewList.AccountName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DP Name</td>
+                                            <td>{{accountOverviewList.DPName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>SBU Name</td>
+                                            <td>{{accountOverviewList.SBUName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Account Type</td>
+                                            <td>{{accountOverviewList.AccountType}}</td>
+                                            <!-- <td>M&A, New Customer, Existing Customer, Products & Platform</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Current Revenue</td>
+                                            <td>{{accountOverviewList.CurrentRevenue}}</td>
+                                            <!-- <td>$ 120Mn</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Contract end date</td>
+                                            <td>{{accountOverviewList.ContractEndDate}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Services Offered</td>
+                                            <td>{{accountOverviewList.servicesOffered}}</td>
+                                            <!-- <td>Digital Operations, AVM, CIS, EAS SAP & QEA</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Relationship with Cognizant</td>
+                                            <td>{{accountOverviewList.RelationshipWithCognizant}}</td>
+                                            <!-- <td>10+ Years</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Headcount</td>
+                                            <td>{{accountOverviewList.headcount}}</td>
+                                            <!-- <td>4000+ associates</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Cognizant Location</td>
+                                            <td>{{accountOverviewList.CognizantLocation}}</td>
+                                            <!-- <td>India , US, Italy, Switzerland, Spain, Argentina & Few other EU locations</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>GDPR Status</td>
+                                            <td>{{accountOverviewList.GDPRStatus}}</td>
+                                            <!-- <td>MSA Approved/Not Approved</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>GDPR Projects Coverage</td>
+                                            <td>{{accountOverviewList.GDPRProjectCoverage}}</td>
+                                            <!-- <td>Applicable Projects & Not Applicable Projects list/Pending List</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>QMS Followed</td>
+                                            <td>{{accountOverviewList.QMSFollowed}}</td>
+                                            <!-- <td>Customer/Cognizant</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Last Internal Audited Date</td>
+                                            <td>{{accountOverviewList.LastIntervelAuditedDate}}</td>
+                                            <!-- <td>Sep-19</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Last Customer Audited Date</td>
+                                            <td>{{accountOverviewList.LastcustomerAuditedDate}}</td>
+                                            <!-- <td>Apr-18</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Information Security Risks - open</td>
+                                            <td>{{accountOverviewList.InformationSecurityRisksOpen}}</td>
+                                            <!-- <td>5 (1- Major, 2-Minor, 2-Cosmetic)</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Delivery Risks - Open</td>
+                                            <td>{{accountOverviewList.DeliveryRisksOpen}}</td>
+                                            <!-- <td>10 (6- Major, 2-Minor, 2-Cosmetic)</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>External Audit Observations - Open</td>
+                                            <td>{{accountOverviewList.ExternalAuditObservationsOpen}}</td>
+                                            <!-- <td>7 (3- Major, 2-Minor, 2-Cosmetic)</td> -->
+                                        </tr>
+                                        <tr>
+                                            <td>Delivery Leads</td>
+                                            <td>{{accountOverviewList.DeliveryLeads}}</td>
+                                            <!-- <td rowspan="3">Lead 1 Lead 2 Lead 3</td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5 auto-calculate">
+                            <h2 style="font-weight: bold; color: #000; font-size: 18px;">Highlights</h2>
+                            <ul style="list-style: none; line-height: 20px; padding-left: 20px;" class="control-table">
+                                <li style="border-right: none;">- 2020 Annual Rev - $980Mn</li>
+                                <li style="border-right: none;">- 2020 Annual Margin – 37.4%</li>
+                                <li style="border-right: none;">- COLA Achieved – $2.4Mn</li>
+                                <li style="border-right: none;">- RRRR Achieved – $2.1Mn</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-12 auto-calculate">
+                            <h2 style="font-weight: bold; color: #000; font-size: 18px;">Top Risks</h2>
+                            <ul style="list-style: none; line-height: 20px; padding-left: 20px;" class="control-table">
+                                <li style="border-right: none;">- BCM -Test Results Not shared for Account 1, Account 2.. Account N</li>
+                                <li style="border-right: none;">- GDPR – Not Approved at MSA for Accounts 1, Account 2.. Account N</li>
+                                <li style="border-right: none;">- CLRM – Contractual NC’s for Account1, Account2.. Account N</li>
+                                <li style="border-right: none;">- Training – Poor Training Compliance for Account1, Account2.. Account N</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>		
+
+            <hr style="border: 1px solid #BDBDBD; margin: 25px 38px 10px;">
+
+            <div class="modal-footer modal-1"> 	
+                <button type="button" class="btn custom-cancel-btn" (click)="closeOverview();">Close</button> 	
+            </div>
+        </div>
+    </div>
+</div>

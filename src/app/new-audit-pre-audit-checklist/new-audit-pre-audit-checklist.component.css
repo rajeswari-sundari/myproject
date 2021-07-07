@@ -1,0 +1,13 @@
+
+.padding{
+    padding-right:600px;
+    height: 1200px;
+}
+.top{
+    padding-top:28px;
+}
+.disabled-btn{
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}

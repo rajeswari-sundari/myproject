@@ -1,0 +1,158 @@
+<div class="page-content"> 
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item" *ngIf="isRpocApocMdu==true"><a routerLink = "/Accountlandscape">Home</a></li>
+        <li class="breadcrumb-item active">My tasks</li>
+      </ol>
+    </nav>
+  
+    <h2 class="main-head-title" *ngIf = "role == 'RPOC'"> My tasks </h2>
+    <h2   class="main-head-title" *ngIf = "role == 'APOC' || role == 'MDU'" > My approvals </h2>
+
+    <div class="profile-tab-content"> 	
+		<div class="tab-content">
+            <div class="search-control-list">
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h4 class="sub-1-head-title"> Audit readiness tasks </h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <ag-grid-angular    name = "agAuditReadiness"
+                                        style="width: 100%; height: 250px;" 
+                                        class="ag-theme-balham"
+                                        [rowData]="auditReadinessRow" 
+                                        [columnDefs]="auditReadinessColumn"
+                                        [defaultColDef]="defaultAuditReadinessColDef"
+                                        [overlayLoadingTemplate]="readinessloadingTemplate"
+                                        [overlayNoRowsTemplate]="noReadinessRowsTemplate">
+                    </ag-grid-angular>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h4 class="sub-1-head-title"> Pre-audit checklist tasks </h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <ag-grid-angular    name = "agPreauditChecklist"
+                                        style="width: 100%; height: 250px;" 
+                                        class="ag-theme-balham"
+                                        [rowData]="preAuditChecklistRow" 
+                                        [columnDefs]="preAuditChecklistColumn"
+                                        [defaultColDef]="defaultpreAuditChecklistColDef"
+                                        [overlayLoadingTemplate]="preauidtchecklistloadingTemplate"
+                                        [overlayNoRowsTemplate]="nopreauidtChecklistRowsTemplate">
+                    </ag-grid-angular>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h4 class="sub-1-head-title"> Post-audit tasks </h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <ag-grid-angular    name = "agPostAudit"
+                                        style="width: 100%; height: 250px;" 
+                                        class="ag-theme-balham"
+                                        [rowData]="postAuditRow" 
+                                        [columnDefs]="postAuditColumn"
+                                        [defaultColDef]="defaultpostAuditColDef"
+                                        [overlayLoadingTemplate]="postauditloadingTemplate"
+                                        [overlayNoRowsTemplate]="nopostAuditRowsTemplate">
+                    </ag-grid-angular>
+                </div>
+
+                <div class="row" *ngIf = "role == 'MDU'">
+                    <div class="col-sm-5">
+                        <h4 class="sub-1-head-title"> Ongoing audits </h4>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf = "role == 'MDU'">
+                    <ag-grid-angular    name = "agOngoingAudit"
+                                        style="width: 100%; height: 250px;" 
+                                        class="ag-theme-balham"
+                                        [rowData]="ongoingAuditRow" 
+                                        [columnDefs]="ongoingAuditColumn"
+                                        [defaultColDef]="defaultongoingAuditColDef"
+                                        [overlayLoadingTemplate]="ongoingauditloadingTemplate"
+                                        [overlayNoRowsTemplate]="noongoingAuditRowsTemplate">
+                    </ag-grid-angular>
+                </div>
+            </div>
+		</div>
+    </div>
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+        <p style="color: grey">Please Wait. </p>  
+    </ngx-spinner> 
+    <div class="modal fade" id="Progresspopup" role="dialog" data-backdrop="static" data-keyboard="false"> 
+        <div class="modal-dialog">							
+            <div class="modal-content size modal-width">															  
+                <div  class="modal-header">  
+                    <h4 class="modal-title pull-left">Progress status</h4>  
+                    <button type="button" class="close pull-right" (click)="CloseProgress();" aria-label="Close">  
+                        <span aria-hidden="true">×</span>  
+                    </button>  
+                </div>
+                <div  class="modal-body"> 
+                    <div class="tab-content modal-1"> 		
+                        <div class="row"> 
+                            <div class="col-sm-6">															
+                                <div class="form-group">       
+                                    <label for="label-1" class="control-label-1">Audit name</label>
+                                    <label for="label-1" class="control-label-2 break-word">{{auditName}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">															
+                                <div class="form-group">       
+                                    <label for="label-1" class="control-label-1">Parent customer</label>
+                                    <label for="label-1" class="control-label-2">{{parentCustomerName}}</label>     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9">															
+                                <div class="form-group" >       
+                                    <label for="label-1" class="control-label-1">Overall controls status</label>
+                                    <label for="label-1" class="control-label-2">{{updatedCount}} of {{totalCount}} tasks updated ( {{overallprogressbarvalue}}% )</label>     
+                                    <div style="margin-top:10px;">  
+                                        <progressbar [value]="overallprogressbarvalue"></progressbar>
+                                    </div>
+                                     
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label for="label-1" class="control-label-1">Controls</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <ag-grid-angular    name = "agProgressstatus"
+                                                style="width: 100%; height: 250px;" 
+                                                class="ag-theme-balham"
+                                                [rowData]="ProgressstatusRow" 
+                                                [columnDefs]="ProgressstatusColumn"
+                                                [defaultColDef]="defaultProgressstatusColDef"
+                                                [overlayLoadingTemplate]="ProgressstatusloadingTemplate"
+                                                [overlayNoRowsTemplate]="noProgressstatusRowsTemplate">
+                            </ag-grid-angular>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer modal-1">  
+                    <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="CloseProgress();">Close</button>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>

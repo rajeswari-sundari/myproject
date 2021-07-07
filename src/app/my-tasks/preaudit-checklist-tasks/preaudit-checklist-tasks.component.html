@@ -1,0 +1,126 @@
+
+<div class="tab-content">    
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" *ngIf="isRpocApocMdu==true"><a routerLink = "/Accountlandscape">Home</a></li>
+            <li class="breadcrumb-item "><a routerLink="/Mytasks">My tasks</a></li>
+            <li class="breadcrumb-item active">Pre-audit checklist tasks</li>
+        </ol>
+    </nav>
+
+    <h2 class="sub-3-head-title"> Pre-audit checklist tasks </h2>
+
+    <div *ngIf= "PreAuditTasksRow!=null" class="new-audit-data">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Audit ID</label>
+                <label for="label-1" class="control-label-2">{{PreAuditTasksRow[0].audit_id}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Audit name</label>
+                <label for="label-1" class="control-label-2">{{PreAuditTasksRow[0].audit_name}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Parent customer</label>
+                <label for="label-1" class="control-label-2">{{PreAuditTasksRow[0].parent_customer_name}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Actual audit date </label>
+                <label for="label-1" class="control-label-2">{{PreAuditTasksRow[0].actual_audit_date}}</label>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 1px solid #BDBDBD; margin: 25px 20px 0px;">
+
+    <div class="search-control-list">
+        <div class="row">
+            <div class="col-sm-5 column-height pad-left custom-right">
+                <h4 class="sub-head-title"> Pre-audit checklist tasks </h4>
+            </div>
+        </div>
+
+        <div class="row TabMenu_1">
+            <ag-grid-angular    name = "agPreAuditTasks"
+                                style="width: 100%; height: 250px;" 
+                                class="ag-theme-balham"
+                                [rowData]="PreAuditTasksRow" 
+                                [columnDefs]="PreAuditTasksColumn"
+                                [gridOptions]="gridOptions"
+                                [rowSelection] = "rowSelection"
+                                [suppressRowClickSelection]="true"
+                                [defaultColDef]="defaultPreAuditTasksColDef"
+                                [overlayLoadingTemplate]="preaudittasksloadingTemplate"
+                                [overlayNoRowsTemplate]="noPreAuditTasksRowsTemplate">
+            </ag-grid-angular>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8 column-height-1">
+                <div class="custom-btn text-left">
+                    <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="ClearSelections()">Clear selection</button>
+                    <button [ngClass]="{'hide-btn':isAdmin}" class="btn custom-blue-btn" name="btnSubmit" (click)="SubmitPreAuditTask()">Submit</button>
+                    <button [ngClass]="{'hide-btn':isRPOC}" class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="RejectPreAuditTask()">Reject</button>
+                    <button [ngClass]="{'hide-btn':isRPOC}"  class="btn custom-blue-btn" name="btnSubmit" (click)="ApprovePreAuditTask()">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner> 
+<div class="modal fade" id="Approvepopup1" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 700px; right: 50px;">                                                           
+            <div  class="modal-header" style="padding-bottom: 0px; padding-top: 0px;">  
+                <button type="button" class="close pull-right" (click)="CloseApprovePopup1();" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+                
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content" style="padding-top: 0px;">
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;">Approve pre-audit checklist task</h4>
+                    <label for="label-1" class="control-label-2">Are you sure you want to approve the task(s) submitted by RPOC?</label>
+                    <label for="label-1" class="control-label-4">Comments [optional]</label>
+                    <textarea  maxlength="2000" placeholder="Enter your comments" [(ngModel)]="SavePreAuditbyRPOCData.p_comments"></textarea>
+                </div>
+            </div>
+            <hr style="border: 1px solid #BDBDBD; margin: 10px 20px 20px;">
+            <div class="modal-footer" style="margin-left: 10px;">
+                <button class="btn custom-cancel-btn" (click)="CloseApprovePopup1();">No</button>
+                <button class="btn custom-blue-btn" name="btnApprove" (click)="SuccessChecklistPopup($event);">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Rejectpopup1" role="dialog" data-backdrop="static"  data-keyboard="false" > 
+    <div class="modal-dialog">                          
+        <div class="modal-content" style="width: 700px; right: 50px;">                                                           
+            <div  class="modal-header" style="padding-bottom: 0px; padding-top: 0px;">  
+                <button type="button" class="close pull-right" (click)="CloseRejectPopup1();" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button>  
+                
+            </div> 
+            <div class="modal-body">
+                <div class="tab-content" style="padding-top: 0px;">
+                    <h4 class="modal-title tab-left" style="margin-top: 0px;">Reject pre-audit checklist tasks</h4>
+                    <label for="label-1" class="control-label-2">Are you sure you want to reject the task(s) submitted by RPOC? Please provide a reason for rejection.</label>
+                    <label for="label-1" class="control-label-4">Comments<span class="mandatory">*</span></label>
+                    <textarea name="Target" (input)="commentsclick(SavePreAuditbyRPOCData.p_comments)" maxlength="2000"  placeholder="Enter your comments" [(ngModel)]="SavePreAuditbyRPOCData.p_comments" #reject_comments="ngModel" required></textarea>
+                    <div class="form-control-feedback" *ngIf="reject_comments.errors && (reject_comments.dirty || reject_comments.touched)">
+                        <div class="invalid_error" *ngIf = "reject_comments.errors?.required">Comments is Required. </div>                        
+                    </div>
+                </div>
+            </div>
+            <hr style="border: 1px solid #BDBDBD; margin: 10px 20px 20px;">
+            <div class="modal-footer" style="margin-left: 10px;">
+                <button class="btn custom-cancel-btn" (click)="CloseRejectPopup1();">No</button>
+                <button class="btn custom-blue-btn" name="btnReject" (click)="SuccessChecklistPopup($event);"  [disabled] = "(reject_comments.invalid || SavePreAuditbyRPOCData.p_comments == '' )">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

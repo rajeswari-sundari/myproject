@@ -1,0 +1,31 @@
+<div class="tab-content"> 
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+      <ol class="breadcrumb">
+        <!-- <li class="breadcrumb-item"><a href="#">Home</a></li> -->
+        <li class="breadcrumb-item active">Account landscape</li>
+      </ol>
+    </nav>
+    <h2 class="main-head-title">Account landscape</h2>
+    <div class="TabMenu_1">
+        <tabset #tabset class="auditlist-tab">
+            <tab *ngFor="let tab of tabsets" [heading]="tab.title" [active]="tab.active" (selectTab)="tab.active=true" (deselect)="tab.active=false">
+                <ng-container [ngSwitch]="tab.ID">
+                    <ng-container *ngSwitchCase="1">
+                        <app-dashboard-landscape *ngIf="tab.active"  (tabactive)="tabactive($event)"></app-dashboard-landscape>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="2">
+                        <app-control-landscape *ngIf="tab.active"  (tabactive)="tabactive($event)"></app-control-landscape>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="3">
+                        <app-integration-landscape *ngIf="tab.active"  (tabactive)="tabactive($event)"></app-integration-landscape>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="4">
+                        <app-publish-landscape *ngIf="tab.active"  (tabactive)="tabactive($event)"></app-publish-landscape>
+                    </ng-container>
+                </ng-container>
+            </tab>
+           
+        </tabset>
+      <!--Giri Commented -->
+    </div>
+</div>

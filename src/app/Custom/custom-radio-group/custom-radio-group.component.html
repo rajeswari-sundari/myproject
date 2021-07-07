@@ -1,0 +1,9 @@
+<section class="radio-group">
+  <div class="form-check d-inline-block" *ngFor="let item of params.radioList; let i = index">
+    <label>
+      <input tabindex="0" class="form-check-input" type="radio" [name]="'radiogroup_'+params.rowIndex" [id]="'radio_'+i" [value]="item?.value" [(ngModel)]="selectedItem" (change)="onChange()">
+      {{ item?.label }}
+    </label>
+  </div>
+</section>
+<div class="invalid_error mt-1" *ngIf="params?.mandatory && !selectedItem" >Please select a value </div>

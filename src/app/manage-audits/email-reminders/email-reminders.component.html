@@ -1,0 +1,102 @@
+<div class="row">
+    <div class="col-sm-8 pad-left">
+        <label for="label-1" class="control-label-3">Daily email reminders settings</label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2 pad-left-3">
+        <label for="label-1" class="control-label">Days of the week<span class="mandatory">*</span></label>
+        <div class="weekDays-selector" style="width: 190px;" >
+            <input type="checkbox" [ngClass]="{'disabled-btn':isAdmin}" id="weekday-mon" class="weekday" value="Mo"  required>
+            <label for="weekday-mon">Mo</label>
+            <input type="checkbox" [ngClass]="{'disabled-btn':isAdmin}" id="weekday-tue" class="weekday"  value="Tu"  required>
+            <label for="weekday-tue">Tu</label>
+            <input type="checkbox" [ngClass]="{'disabled-btn':isAdmin}" id="weekday-wed" class="weekday" value="We"required>
+            <label for="weekday-wed">We</label>
+            <input type="checkbox" [ngClass]="{'disabled-btn':isAdmin}" id="weekday-thu" class="weekday" value="Th" required>
+            <label for="weekday-thu">Th</label>
+            <input type="checkbox" [ngClass]="{'disabled-btn':isAdmin}" id="weekday-fri" class="weekday" value="Fr"required>
+            <label for="weekday-fri">Fr</label> 
+        </div>
+        <!-- <div class="form-control-feedback" *ngIf="weekday.errors && (weekday.dirty || weekday.touched)">
+            <div class="invalid_error" *ngIf = "weekday.errors?.required">Select Days is Required. </div>
+        </div> -->
+    </div>
+
+    <!-- <input type="checkbox" (click)="checkedHandler($event)"
+[checked]="params.value" 
+/>-->
+
+    <div class="col-sm-2">
+        <label for="label-1" class="control-label">Time<span class="mandatory">*</span></label>
+        <input type="time" [ngClass]="{'disabled-btn':isAdmin}" class="form-control" id="email_reminder_time" #email_reminder_time="ngModel"
+        [(ngModel)]="emailReminderDetailsData.email_reminder_time" required>
+        <div class="form-control-feedback" *ngIf="email_reminder_time.errors && (email_reminder_time.dirty || email_reminder_time.touched)">
+            <div class="invalid_error" *ngIf = "email_reminder_time.errors?.required">Time is Required. </div>
+        </div>
+    </div>
+    <div class="col-sm-2 pad-left-3">
+        <label for="label-1" class="control-label">Timezone<span class="mandatory">*</span></label>
+    
+        <select [ngClass]="{'disabled-btn':isAdmin}" class="selectpicker  form-control" name="email_reminder_timezone" #email_reminder_timezone="ngModel"
+         [(ngModel)]="emailReminderDetailsData.email_reminder_timezone" required>
+            <option  [ngValue] = "null" >Select Timezone</option>
+            <option *ngFor="let pcl of timezoneSelectList" [ngValue]="pcl.Key">{{pcl.Value}}</option>
+        </select>
+        <div class="form-control-feedback" *ngIf="email_reminder_timezone.errors && (email_reminder_timezone.dirty || email_reminder_timezone.touched)">
+            <div class="invalid_error" *ngIf = "email_reminder_timezone.errors?.required">Timezone is Required. </div>
+        </div>
+                            
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-8 pad-left">
+        <label for="label-1" class="control-label">Send reminder until<span class="mandatory">*</span></label>
+        <div class="auto-calculate" style="width: 100%;">  
+            <input type="radio"  style="margin-top: 7px;"  [(ngModel)]="emailReminderDetailsData.email_reminder_until" name="radio" value="Approved by MDU RCM">
+            <span>Approved by MDU RCM</span>    
+            <input type="radio"  style="margin-top: 7px;"  [(ngModel)]="emailReminderDetailsData.email_reminder_until" name="radio" value="Approved by APOC">
+            <span>Approved by APOC</span>
+            <input type="radio"  style="margin-top: 7px;"  [(ngModel)]="emailReminderDetailsData.email_reminder_until" name="radio" value="Updated & submitted by RPOC">
+            <span>Updated & submitted by RPOC</span>
+        </div>     
+        <!-- <div class="form-control-feedback" *ngIf="email_reminder_until.errors && (email_reminder_until.dirty || email_reminder_until.touched)">
+            <div class="invalid_error" *ngIf = "email_reminder_until.errors?.required">Select Reminder is Required.</div>
+        </div>             -->
+    </div>
+</div>
+<br>
+<br>
+<div class="row">
+     <ag-grid-angular   name = "agSample1"
+                        style="width: 100%; height: 400px;" 
+                        class="ag-theme-balham"
+                        [rowData]="rowData" 
+                        [columnDefs]="columnDefs"
+                        [defaultColDef]="defaultColDef"
+                        [gridOptions]="gridOptions1"
+                        [suppressRowClickSelection]="true"
+                        [rowSelection]="rowSelection1"
+                        [overlayLoadingTemplate]="loadingTemplate"
+                        [overlayNoRowsTemplate]="noRowsTemplate">
+    </ag-grid-angular>
+
+    
+</div>
+<div class="row" style="margin-top: 20px;">
+    <div class="col-sm-8">
+        <div class="custom-btn text-left">
+            <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="CancelAudit();" >Cancel</button>
+            <button  class="btn  custom-cancel-btn" style ="margin-left: 0px;" name="btnClear" (click)="GoBacktoManagePOC();" >Back</button>
+            <button *ngIf="isAdmin==false" class="btn custom-blue-btn" name="btnSearch"  (click)="SaveEmailReminderDetails();">
+                Save
+            </button>
+            <button *ngIf="isAdmin==false" class="btn custom-blue-btn" name="btnSearch" (click)="Proceed();">Save &amp; proceed</button>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+    <p style="color: grey">Please Wait. </p>  
+</ngx-spinner>

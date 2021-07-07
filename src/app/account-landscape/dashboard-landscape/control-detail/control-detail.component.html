@@ -1,0 +1,68 @@
+<div class="tab-content"> 
+    <nav aria-label="breadcrumb" class="breadcumb-nav">
+      <ol class="breadcrumb">
+        <!-- <li class="breadcrumb-item"><a href="#">Home</a></li> -->
+        <li class="breadcrumb-item"><a  routerLink="/Accountlandscape" >Account landscape</a> </li>
+        <li class="breadcrumb-item active">View control detailed status</li>
+      </ol>
+    </nav>
+    <h2 class="main-head-title">View control detailed status</h2>
+
+    <div style="margin: 39px;">
+        <div class="row">
+            <div class="col-sm-2" *ngIf="isSBURPOC==false">
+                <label for="label-1" class="control-label-1">Level of view</label>
+                <label for="label-1" class="control-label-2">{{accLsCategoryView.Levelofview}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Account</label>
+                <label for="label-1" class="control-label-2">{{accLsCategoryView.AccountName}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Project</label>
+                <label for="label-1" class="control-label-2">{{accLsCategoryView.ProjectName}}</label>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Parent category</label>
+                <label for="label-1" class="control-label-2">{{accLsCategoryView.ParentCategoryName}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Category</label>
+                <label for="label-1" class="control-label-2">{{accLsCategoryView.CategoryName}}</label>
+            </div>
+            <div class="col-sm-2">
+                <label for="label-1" class="control-label-1">Control</label>
+                <label for="label-1" class="control-label-2">{{accLsCategoryView.ControlName}}</label>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 1px solid #BDBDBD; margin: 25px 38px 10px;">
+
+    <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">  
+        <p style="color: grey">Please Wait. </p>  
+    </ngx-spinner> 
+
+    <div class="row" style="float: right;">
+        <div class="col-sm-12" >
+            <button class="btn  custom-cancel-btn" *ngIf="accLsCategoryView.Followup=='Yes' && isSBURPOC==false">Send reminder</button> 
+            <button class="btn  custom-cancel-btn" *ngIf="accLsCategoryView.Followup=='Yes' && isSBURPOC==false">Send defaulter mail</button> 
+            <button class="btn  custom-cancel-btn"  (click)="DownloadReport();" >Download detailed report</button> 
+        </div>
+    </div>
+
+    <div class="row" style="margin: 39px; width: 94%;">
+        <ag-grid-angular name = "agControlDetail"
+                            style="height: 500px;" 
+                            class="ag-theme-balham"
+                            [rowData]="detailedRow" 
+                            [columnDefs]="detailedColumn"
+                            [defaultColDef]="defaultdetailedColDef"
+                            [overlayLoadingTemplate]="detailedloadingTemplate"
+                            [overlayNoRowsTemplate]="nodetailedRowsTemplate">
+        </ag-grid-angular>
+    </div>
+</div>
